@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Generate a Password!{% endblock %}</h1>
+  <a href="{{ url_for('menu.home') }}">Go Back</a>
+{% endblock %}
+
+{% block content %}
+  <br>
+  <body>
+      <form method = "get" id="form">
+        <p id="txt">Your generated password will appear below</p>
+        <textarea id="here"></textarea> 
+        <input id=gen type="button" value="Generate" onclick='output()'><input id=copy type="button" value="Copy" style="display: none;">
+      </form>
+  </body>
+  <br>
+  <form method="post" style="display: none;" id="optional">
+    <label for="website">Website </label>
+    <input name="website" id="website" value="{{ request.form['website'] }}"required>
+    <label for="email">For Who? </label>
+    <input name="email" id="email" value="{{ request.form['email'] }}"required>
+    <label for="password">Password </label>
+    <input type="password" name="password" id="password" value="{{ password }}" required>
+    <input type="submit" value="Add">
+  </form>
+
+  <script>
+    function output() {
+      document.getElementById("txt").innerHTML = "Password Generated: "
+      document.getElementById("here").innerHTML = JSON.parse('{{ password|tojson|safe }}')
+      again = document.getElementById("gen")
+      again.type = "button"
+      again.value = "Generate Again?"
+      again.onclick = function () {
+        location.href = "{{ url_for('menu.generate') }}"
+      }
+      document.getElementById("copy").style = 'display: "";'
+      document.getElementById("copy").onclick = function () { copy() }
+      add = document.createElement("button")
+      add.type = "button"
+      add.innerHTML = "Quick Add"
+      add.onclick = function() { show() }
+      add.id = "add"
+      document.body.appendChild(add)  
+    }
+
+    function copy() {
+      // Get the text field
+      var copyText = document.getElementById("here").innerHTML
+      navigator.clipboard.writeText(copyText)
+
+      // Alert the copied text
+      alert("Copied the text: " + copyText)
+    }
+
+    function show() {
+      document.getElementById("optional").style = ""
+      document.getElementById("add").style = "display: none;"
+    }
+  </script>
+{% endblock %}

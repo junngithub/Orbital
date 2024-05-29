@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Welcome {{g.user[1]}} {% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('menu.add') }}">Add Password</a>
+    <a class="action" href="{{ url_for('menu.generate') }}">Generate Password</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <h1>
+    <div>
+      <div class="about">Your Passwords</div>
+    </div>
+  </h1>
+  {% if table == "None" %}
+    <i><p>you have not added any passwords</p></i>
+  {% else %}
+    <table>
+      <tr>
+        <th>Website</th>
+        <th>Account</th>
+        <th>Password</th>
+      </tr>
+    {% for row in table %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>{{ row[1] }}</td>
+      <td>{{ row[2] }}</td>
+    </tr>
+    {% if not loop.last %}
+    {% endif %}
+  {% endfor %}
+  {% endif %}  
+{% endblock %}

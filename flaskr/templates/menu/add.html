@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Add Password{% endblock %}</h1>
+  <a href="{{ url_for('menu.home') }}">Go Back</a>  
+{% endblock %}
+
+{% block content %}
+<br>
+  <form method="post">
+    <label for="website">Website </label>
+    <input name="website" id="website" value="{{ request.form['website'] }}"required>
+    <label for="email">For Who? </label>
+    <input name="email" id="email" value="{{ request.form['email'] }}"required>
+    <label for="password">Password </label>
+    <input type="password" name="password" id="password" value="{{ request.form['password'] }}" required>
+    <input type="submit" value="Add" onsubmit="check()">
+  </form>
+
+  <script>
+    function check() {
+      if (JSON.parse('{{ check|tojson|safe }}') === "todo") {
+        
+      }
+    }
+  </script>
+{% endblock %}
+
