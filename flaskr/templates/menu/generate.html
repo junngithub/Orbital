@@ -5,12 +5,12 @@
   <a href="{{ url_for('menu.home') }}">Go Back</a>
 {% endblock %}
 
-{% block content %}
+{% block page_content %}
   <br>
   <body>
       <form method = "get" id="form">
         <p id="txt">Your generated password will appear below</p>
-        <textarea id="here"></textarea> 
+        <input type="text" id="here" value="">
         <input id=gen type="button" value="Generate" onclick='output()'><input id=copy type="button" value="Copy" style="display: none;">
       </form>
   </body>
@@ -28,12 +28,10 @@
   <script>
     function output() {
       document.getElementById("txt").innerHTML = "Password Generated: "
-      document.getElementById("here").innerHTML = JSON.parse('{{ password|tojson|safe }}')
-      again = document.getElementById("gen")
-      again.type = "button"
-      again.value = "Generate Again?"
-      again.onclick = function () {
-        location.href = "{{ url_for('menu.generate') }}"
+      document.getElementById("here").value = JSON.parse('{{ password|tojson|safe }}')
+      document.getElementById("gen").value = "Generate Again?"
+      document.getElementById("gen").onclick = function () {
+        location.replace("{{ url_for('menu.generate') }}")  
       }
       document.getElementById("copy").style = 'display: "";'
       document.getElementById("copy").onclick = function () { copy() }
@@ -47,7 +45,9 @@
 
     function copy() {
       // Get the text field
-      var copyText = document.getElementById("here").innerHTML
+      var copyText = document.getElementById("here").value
+      document.getElementById("here").select()
+      document.getElementById("here").setSelectionRange(0, 99999)
       navigator.clipboard.writeText(copyText)
 
       // Alert the copied text

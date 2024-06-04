@@ -1,8 +1,7 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, session
 )
 from werkzeug.exceptions import abort
-from psycopg import IntegrityError
 
 from .auth import login_required
 from .initdb import get_db
@@ -34,7 +33,6 @@ def home():
 @bp.route('/add', methods=('GET', 'POST'))
 @login_required
 def add():
-    check = "none"
     if request.method == 'POST':
         website = request.form['website'].strip()
         email = request.form['email'].strip()
@@ -53,6 +51,7 @@ def add():
                 web_check = cur.execute(
                     SQL_select, (website,)
                 ).fetchone()
+                # check if website is present
                 if web_check is None:
                     SQL_insert = 'INSERT INTO website(website, website_id) VALUES (%s, %s)'
                     cur.execute(
@@ -65,21 +64,50 @@ def add():
                 pw_check = cur.execute(
                     SQL_select, (web_check[0],)
                 ).fetchone()
+
                 if pw_check is None or pw_check[4] != email:
                     SQL_insert = 'INSERT INTO pw (email, pw, pw_id) VALUES (%s, %s, %s)'
                     cur.execute(
                         SQL_insert, (email, pw, web_check[0])
                     )
+                    dbconn.commit()
+                    cur.close()
+                    dbconn.close()
+                    flash("Password Added")
+                    return redirect(url_for("menu.home"))
                 else:
                     # TODO RESOLVE CLASHES OF PW IN EXISTING EMAIL ACCOUNT
-                    check = "todo"
-                    pass
-            dbconn.commit()
-            cur.close()
-            dbconn.close()
-            return redirect(url_for('menu.home'))
-    return render_template('menu/add.html', check = check)
+                    session['email'] = email
+                    session['pw'] = pw
+                    session['pw_id'] = web_check[0]
+                    cur.close()
+                    dbconn.close()
+                    return redirect(url_for("menu.confirm"))
+    return render_template('menu/add.html')
 
+@bp.route('/confirm', methods=('GET', 'POST'))
+@login_required
+def confirm():
+    if request.method == 'POST':
+        if request.form['answer'] == "Ok":
+            email = session.get('email')
+            pw = session.get('pw')
+            pw_id = session.get('pw_id')
+            dbconn = get_db()
+            with dbconn.cursor() as cur:
+                SQL_delete = 'DELETE FROM pw WHERE email = %s'
+                SQL_insert = 'INSERT INTO pw (email, pw, pw_id) VALUES (%s, %s, %s)' 
+                cur.execute(
+                    SQL_delete, (email,) 
+                )
+                cur.execute(
+                    SQL_insert, (email, pw, pw_id) 
+                )
+                dbconn.commit()
+                cur.close()
+                dbconn.close()
+            return redirect(url_for("menu.home"))
+    return render_template('menu/confirm.html')
 
 @bp.route('/generate', methods=('GET', 'POST'))
 @login_required
@@ -97,7 +125,7 @@ def generate():
         with dbconn.cursor() as cur:
             tup = cur.execute('SELECT pw FROM pw').fetchall()
         r = random.randint(10, 16)
-        alphabet = string.ascii_letters + string.digits + string.punctuation
+        alphabet = string.ascii_letters + string.digits + "!#$%^&*+,-.:;<=>?@_~"
         while True:
             password = ''.join(secrets.choice(alphabet) for i in range(r))
             if (any(c.islower() for c in password)
@@ -106,6 +134,6 @@ def generate():
                     and check(tup, password)):
                 break
     if request.method == 'POST':
-        add()
+        return add()
     return render_template('menu/generate.html', password = password)
 

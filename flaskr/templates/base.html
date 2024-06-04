@@ -16,8 +16,19 @@
   <header>
     {% block header %}{% endblock %}
   </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
+  {% block content %}
+
+  <div class="container">
+    {% for message in get_flashed_messages() %}
+    <br>
+    <div class="alert alert-warning">
+        <button type="button" class="btn-close" onclick="this.parentElement.style.display = 'none'">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+  </div>
+  {% endblock %}
+  
 </section>

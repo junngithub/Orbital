@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+  <form method="post">
+    <dialog open>
+      <p> A password is tied to this website and account. Replace old password? </p>
+      <input type="submit" value="Ok" onclick="ok()" name="answer" id="Ok"> <input type = "button" value="Cancel" onclick="cancel()" name="answer" id="Cancel">
+    </dialog>
+  </form>
+
+  <script>
+    function ok() {
+      alert("Password Added")
+    }
+    function cancel() {
+      alert("Request Cancelled")
+      location.href = "{{ url_for('menu.home') }}"
+    }
+
+  </script>
+{% endblock %}
