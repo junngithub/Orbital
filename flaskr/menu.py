@@ -94,10 +94,10 @@ def confirm():
             pw_id = session.get('pw_id')
             dbconn = get_db()
             with dbconn.cursor() as cur:
-                SQL_delete = 'DELETE FROM pw WHERE email = %s'
+                SQL_delete = 'DELETE FROM pw WHERE email = %s AND pw_id = %s'
                 SQL_insert = 'INSERT INTO pw (email, pw, pw_id) VALUES (%s, %s, %s)' 
                 cur.execute(
-                    SQL_delete, (email,) 
+                    SQL_delete, (email, pw_id) 
                 )
                 cur.execute(
                     SQL_insert, (email, pw, pw_id) 
