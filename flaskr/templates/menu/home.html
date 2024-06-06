@@ -9,6 +9,9 @@
 {% endblock %}
 
 {% block page_content %}
+  <head>
+    <script src="{{ url_for('static', filename='copy.js') }}"></script>
+  </head>
   <h1>
     <div>
       <div class="about">Your Passwords</div>
@@ -22,12 +25,14 @@
         <th>Website</th>
         <th>Account</th>
         <th>Password</th>
+        <th>Copy</th>
       </tr>
     {% for row in table %}
     <tr>
       <td>{{ row[0] }}</td>
       <td>{{ row[1] }}</td>
-      <td>{{ row[2] }}</td>
+      <td><input type="text" id="here" value="{{ row[2] }}" readonly></td>
+      <td><input type="button" value="Copy" onclick="copy()"></td>
     </tr>
     {% if not loop.last %}
     {% endif %}

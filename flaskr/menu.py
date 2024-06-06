@@ -76,7 +76,6 @@ def add():
                     flash("Password Added")
                     return redirect(url_for("menu.home"))
                 else:
-                    # TODO RESOLVE CLASHES OF PW IN EXISTING EMAIL ACCOUNT
                     session['email'] = email
                     session['pw'] = pw
                     session['pw_id'] = web_check[0]
@@ -106,6 +105,7 @@ def confirm():
                 dbconn.commit()
                 cur.close()
                 dbconn.close()
+            flash("Password Added")
             return redirect(url_for("menu.home"))
     return render_template('menu/confirm.html')
 
@@ -119,7 +119,8 @@ def generate():
                 return False
         return True
 
-    password = None
+    password = ""
+
     if request.method == 'GET':
         dbconn = get_db()
         with dbconn.cursor() as cur:
@@ -127,12 +128,12 @@ def generate():
         r = random.randint(10, 16)
         alphabet = string.ascii_letters + string.digits + "!#$%^&*+,-.:;<=>?@_~"
         while True:
-            password = ''.join(secrets.choice(alphabet) for i in range(r))
+            password = "".join(secrets.choice(alphabet) for i in range(r))
             if (any(c.islower() for c in password)
                     and any(c.isupper() for c in password)
                     and sum(c.isdigit() for c in password) >= 3
                     and check(tup, password)):
-                break
+                break        
     if request.method == 'POST':
         return add()
     return render_template('menu/generate.html', password = password)

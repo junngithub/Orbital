@@ -6,13 +6,18 @@
 {% endblock %}
 
 {% block page_content %}
+  <head>
+    <script src="{{ url_for('static', filename='generate_output.js')}}"></script>
+    <script src="{{ url_for('static', filename='copy.js')}}"></script>
+    <script src="{{ url_for('static', filename='show.js')}}"></script>
+  </head>
   <br>
-  <body>
-      <form method = "get" id="form">
-        <p id="txt">Your generated password will appear below</p>
-        <input type="text" id="here" value="">
-        <input id=gen type="button" value="Generate" onclick='output()'><input id=copy type="button" value="Copy" style="display: none;">
-      </form>
+  <body>  
+    <form method = "get" id="form" data-pw='{{ password|tojson }}'>
+      <p id="txt">Your generated password will appear below</p>
+      <input type="text" id="here" value="" readonly>
+      <input id=gen type="button" value="Generate" onclick='output()'> <input id=copy type="button" value="Copy" style="display: none;">
+    </form>
   </body>
   <br>
   <form method="post" style="display: none;" id="optional">
@@ -25,38 +30,4 @@
     <input type="submit" value="Add">
   </form>
 
-  <script>
-    function output() {
-      document.getElementById("txt").innerHTML = "Password Generated: "
-      document.getElementById("here").value = JSON.parse('{{ password|tojson|safe }}')
-      document.getElementById("gen").value = "Generate Again?"
-      document.getElementById("gen").onclick = function () {
-        location.replace("{{ url_for('menu.generate') }}")  
-      }
-      document.getElementById("copy").style = 'display: "";'
-      document.getElementById("copy").onclick = function () { copy() }
-      add = document.createElement("button")
-      add.type = "button"
-      add.innerHTML = "Quick Add"
-      add.onclick = function() { show() }
-      add.id = "add"
-      document.body.appendChild(add)  
-    }
-
-    function copy() {
-      // Get the text field
-      var copyText = document.getElementById("here").value
-      document.getElementById("here").select()
-      document.getElementById("here").setSelectionRange(0, 99999)
-      navigator.clipboard.writeText(copyText)
-
-      // Alert the copied text
-      alert("Copied the text: " + copyText)
-    }
-
-    function show() {
-      document.getElementById("optional").style = ""
-      document.getElementById("add").style = "display: none;"
-    }
-  </script>
 {% endblock %}
