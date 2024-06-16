@@ -19,7 +19,6 @@
 
   <div class="container">
     {% for message in get_flashed_messages() %}
-    <br>
     <div class="alert alert-warning">
         <button type="button" class="btn-close" onclick="this.parentElement.style.display = 'none'">&times;</button>
         {{ message }}

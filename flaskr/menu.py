@@ -1,10 +1,11 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, session
+    Blueprint, flash, g, redirect, render_template, request, url_for, session, current_app
 )
 from werkzeug.exceptions import abort
 
 from .auth import login_required
 from .initdb import get_db
+from .actions import decrypt, encrypt
 
 import string
 import secrets
@@ -19,15 +20,26 @@ def home():
     dbconn = get_db()
     with dbconn.cursor() as cur:
         SQL = '''
-            SELECT w.website, a.email, a.pw
+            SELECT w.website, a.email, a.pw, a.salt, a.iv
             FROM website w
-            INNER JOIN users u ON w.website_id = %s
-            INNER JOIN pw a ON a.pw_id = w.id
+            INNER JOIN pw a ON a.pw_id = w.id AND w.website_id = %s
             ORDER by w.id
         '''
         table = cur.execute(SQL, (g.user[0],)).fetchall()
         if not table:
             table = "None"
+        else:
+            temp = [None] * len(table)
+            i = 0
+            for row in table:
+                cipher_dict = {
+                    'cipher_text' : row[2],
+                    'salt' : row[3],
+                    'iv' : row[4]    
+                }
+                temp[i] = (row[0], row[1], decrypt(cipher_dict, current_app.config['SECRET_KEY']))
+                i += 1
+            table = temp
     return render_template('menu/home.html', table = table)
 
 @bp.route('/add', methods=('GET', 'POST'))
@@ -36,7 +48,8 @@ def add():
     if request.method == 'POST':
         website = request.form['website'].strip()
         email = request.form['email'].strip()
-        pw = request.form['password'].strip()
+        pw_dict = encrypt(request.form['password'].strip(), current_app.config['SECRET_KEY'])
+        pw = pw_dict['cipher_text']
         error = None
 
         if not website:
@@ -60,15 +73,15 @@ def add():
                     web_check = cur.execute(
                         SQL_select, (website,)
                     ).fetchone()
-                SQL_select = 'SELECT * FROM pw where pw_id = %s'
+                SQL_select = 'SELECT * FROM pw where pw_id = %s AND email = %s'
                 pw_check = cur.execute(
-                    SQL_select, (web_check[0],)
+                    SQL_select, (web_check[0], email)
                 ).fetchone()
 
-                if pw_check is None or pw_check[4] != email:
-                    SQL_insert = 'INSERT INTO pw (email, pw, pw_id) VALUES (%s, %s, %s)'
+                if pw_check is None:
+                    SQL_insert = 'INSERT INTO pw (email, pw, pw_id, salt, iv) VALUES (%s, %s, %s, %s, %s)'
                     cur.execute(
-                        SQL_insert, (email, pw, web_check[0])
+                        SQL_insert, (email, pw, web_check[0], pw_dict['salt'], pw_dict['iv'])
                     )
                     dbconn.commit()
                     cur.close()
@@ -77,7 +90,7 @@ def add():
                     return redirect(url_for("menu.home"))
                 else:
                     session['email'] = email
-                    session['pw'] = pw
+                    session['pw_dict'] = pw_dict
                     session['pw_id'] = web_check[0]
                     cur.close()
                     dbconn.close()
@@ -90,17 +103,18 @@ def confirm():
     if request.method == 'POST':
         if request.form['answer'] == "Ok":
             email = session.get('email')
-            pw = session.get('pw')
+            pw_dict = session.get('pw_dict')
+            pw = pw_dict['cipher_text']
             pw_id = session.get('pw_id')
             dbconn = get_db()
             with dbconn.cursor() as cur:
                 SQL_delete = 'DELETE FROM pw WHERE email = %s AND pw_id = %s'
-                SQL_insert = 'INSERT INTO pw (email, pw, pw_id) VALUES (%s, %s, %s)' 
+                SQL_insert = 'INSERT INTO pw (email, pw, pw_id, salt, iv) VALUES (%s, %s, %s, %s, %s)' 
                 cur.execute(
                     SQL_delete, (email, pw_id) 
                 )
                 cur.execute(
-                    SQL_insert, (email, pw, pw_id) 
+                    SQL_insert, (email, pw, pw_id, pw_dict['salt'], pw_dict['iv']) 
                 )
                 dbconn.commit()
                 cur.close()

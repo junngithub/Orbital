@@ -1,7 +1,7 @@
 import os
 import psycopg
 import click
-from flask import current_app, g
+from flask import g
 
 
 def get_db():
@@ -41,6 +41,8 @@ def init_db():
             pw_id INT NOT NULL,
             email TEXT,
             expiry TEXT,
+            salt TEXT NOT NULL,
+            iv TEXT NOT NULL,
             FOREIGN KEY (pw_id) REFERENCES website (id)
             )
         """)
