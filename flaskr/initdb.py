@@ -36,11 +36,10 @@ def init_db():
 
             CREATE TABLE IF NOT EXISTS pw (
             id SERIAL PRIMARY KEY,
-            created_at TIMESTAMP,
             pw TEXT NOT NULL,
             pw_id INT NOT NULL,
             email TEXT,
-            expiry TEXT,
+            expiry TIMESTAMP,
             salt TEXT NOT NULL,
             iv TEXT NOT NULL,
             FOREIGN KEY (pw_id) REFERENCES website (id)

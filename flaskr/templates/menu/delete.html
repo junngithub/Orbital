@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Delete Password(s){% endblock %}</h1>
+    <a href="{{ url_for('menu.home') }}">Go Back</a>
+{% endblock %}
+
+{% block page_content %}
+    <head>
+        <script  src="{{ url_for('static', filename='Scripts/delete_actions.js') }}"></script>
+    </head>
+    <h1>
+    <div>
+        <div class="about">Your Passwords</div>
+    </div>
+    </h1>
+    <form method="post" onsubmit="get_checked()">
+        <input name="arr" value="" id="arr" name="arr" hidden>
+        {% if table == "None" %}
+            <i><p>you have not added any passwords</p></i>
+        {% else %}
+            <table>
+                <tr>
+                    <th>Website</th>
+                    <th>Account</th>
+                    <th>Password</th>
+                    <th>Delete</th>
+                </tr>
+            {% for row in table %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td><input type="checkbox" class="box" id="{{ row[3] }}"></td>
+            </tr>
+            {% if not loop.last %}
+            {% endif %}
+            {% endfor %}
+            <tfoot>
+                <tr>
+                    <td><input type="button" onclick="check_all(event)" value="Delete All" id="delete-all"></td>
+                    <td><input type="submit" value="Confirm" id="confirm"></td>
+                </tr>
+            </tfoot>
+            </table>
+        {% endif %}
+    </form>
+{% endblock %}

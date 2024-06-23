@@ -5,12 +5,14 @@
   {% if g.user %}
     <a class="action" href="{{ url_for('menu.add') }}">Add Password</a>
     <a class="action" href="{{ url_for('menu.generate') }}">Generate Password</a>
+    <a class="action" href="{{ url_for('menu.delete') }}">Delete Password</a>
   {% endif %}
 {% endblock %}
 
 {% block page_content %}
   <head>
-    <script src="{{ url_for('static', filename='copy.js') }}"></script>
+    <script src="{{ url_for('static', filename='Scripts/copy.js') }}"></script>
+    <script src="{{ url_for('static', filename='Scripts/home_copy.js') }}"></script>
   </head>
   <h1>
     <div>
@@ -31,8 +33,8 @@
     <tr>
       <td>{{ row[0] }}</td>
       <td>{{ row[1] }}</td>
-      <td><input type="text" id="here" value="{{ row[2] }}" readonly></td>
-      <td><input type="button" value="Copy" onclick="copy()"></td>
+      <td>{{ row[2] }}</td>
+      <td><input type="button" class="copy" value="Copy"></td>
     </tr>
     {% if not loop.last %}
     {% endif %}

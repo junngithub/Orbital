@@ -5,7 +5,7 @@ from werkzeug.exceptions import abort
 
 from .auth import login_required
 from .initdb import get_db
-from .actions import decrypt, encrypt
+from .actions import decrypt, encrypt, get_all
 
 import string
 import secrets
@@ -17,29 +17,7 @@ bp = Blueprint('menu', __name__, url_prefix='/menu')
 @bp.route('/')
 @login_required
 def home():
-    dbconn = get_db()
-    with dbconn.cursor() as cur:
-        SQL = '''
-            SELECT w.website, a.email, a.pw, a.salt, a.iv
-            FROM website w
-            INNER JOIN pw a ON a.pw_id = w.id AND w.website_id = %s
-            ORDER by w.id
-        '''
-        table = cur.execute(SQL, (g.user[0],)).fetchall()
-        if not table:
-            table = "None"
-        else:
-            temp = [None] * len(table)
-            i = 0
-            for row in table:
-                cipher_dict = {
-                    'cipher_text' : row[2],
-                    'salt' : row[3],
-                    'iv' : row[4]    
-                }
-                temp[i] = (row[0], row[1], decrypt(cipher_dict, current_app.config['SECRET_KEY']))
-                i += 1
-            table = temp
+    table = get_all()
     return render_template('menu/home.html', table = table)
 
 @bp.route('/add', methods=('GET', 'POST'))
@@ -94,41 +72,16 @@ def add():
                     session['pw_id'] = web_check[0]
                     cur.close()
                     dbconn.close()
-                    return redirect(url_for("menu.confirm"))
+                    return redirect(url_for("confirm.add"))
     return render_template('menu/add.html')
 
-@bp.route('/confirm', methods=('GET', 'POST'))
-@login_required
-def confirm():
-    if request.method == 'POST':
-        if request.form['answer'] == "Ok":
-            email = session.get('email')
-            pw_dict = session.get('pw_dict')
-            pw = pw_dict['cipher_text']
-            pw_id = session.get('pw_id')
-            dbconn = get_db()
-            with dbconn.cursor() as cur:
-                SQL_delete = 'DELETE FROM pw WHERE email = %s AND pw_id = %s'
-                SQL_insert = 'INSERT INTO pw (email, pw, pw_id, salt, iv) VALUES (%s, %s, %s, %s, %s)' 
-                cur.execute(
-                    SQL_delete, (email, pw_id) 
-                )
-                cur.execute(
-                    SQL_insert, (email, pw, pw_id, pw_dict['salt'], pw_dict['iv']) 
-                )
-                dbconn.commit()
-                cur.close()
-                dbconn.close()
-            flash("Password Added")
-            return redirect(url_for("menu.home"))
-    return render_template('menu/confirm.html')
 
 @bp.route('/generate', methods=('GET', 'POST'))
 @login_required
 def generate():
     
-    def check(tup, str):
-        for p in tup:
+    def check(table, str):
+        for p in table:
             if p == str:
                 return False
         return True
@@ -138,7 +91,18 @@ def generate():
     if request.method == 'GET':
         dbconn = get_db()
         with dbconn.cursor() as cur:
-            tup = cur.execute('SELECT pw FROM pw').fetchall()
+            table = cur.execute('SELECT pw, salt, iv FROM pw').fetchall()
+            temp = [None] * len(table)
+            i = 0
+            for row in table:
+                cipher_dict = {
+                    'cipher_text' : row[0],
+                    'salt' : row[1],
+                    'iv' : row[2]    
+                }
+                temp[i] = decrypt(cipher_dict, current_app.config['SECRET_KEY'])
+                i += 1
+            table = temp
         r = random.randint(10, 16)
         alphabet = string.ascii_letters + string.digits + "!#$%^&*+,-.:;<=>?@_~"
         while True:
@@ -146,9 +110,23 @@ def generate():
             if (any(c.islower() for c in password)
                     and any(c.isupper() for c in password)
                     and sum(c.isdigit() for c in password) >= 3
-                    and check(tup, password)):
+                    and check(table, password)):
                 break        
     if request.method == 'POST':
         return add()
     return render_template('menu/generate.html', password = password)
 
+
+@bp.route('/delete', methods=('GET', 'POST'))
+@login_required
+def delete():
+    table = get_all()
+    if request.method == 'POST':
+        temp = request.form["arr"]
+        if len(temp) == 0:
+            flash("no passwords selected")
+        else:
+            arr = temp.split(",")
+            session["arr"] = arr
+            return redirect(url_for("confirm.delete"))
+    return render_template('menu/delete.html', table = table)

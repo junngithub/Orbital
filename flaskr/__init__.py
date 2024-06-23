@@ -32,4 +32,7 @@ def create_app(test_config=None):
     from . import menu
     app.register_blueprint(menu.bp)
 
+    from . import confirm
+    app.register_blueprint(confirm.bp)
+
     return app
