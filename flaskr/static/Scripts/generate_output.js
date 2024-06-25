@@ -1,19 +1,21 @@
-function output() {
-    document.getElementById("txt").innerHTML = "Password Generated: "
-    document.getElementById("here").value = JSON.parse(document.getElementById("form").dataset.pw)
-    document.getElementById("gen").value = "Generate Again?"
-    document.getElementById("gen").onclick = function () {
-        window.location.reload()
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById("gen").value == "Generate Again?") {
+        document.getElementById("gen").type = "reset"
+        document.getElementById("gen").onclick = function () {
+            location.replace(document.getElementById("form").dataset.defaultlocation)
+        }
+        document.getElementById("box").remove()
+        document.getElementById("box_label").remove()
+        document.getElementById("copy").style = 'display: "";'
+        document.getElementById("copy").onclick = function () { generate_copy() }
+        add = document.createElement("button")
+        add.type = "button"
+        add.innerHTML = "Quick Add"
+        add.onclick = function() { show() }
+        add.id = "add"
+        document.body.appendChild(add)
     }
-    document.getElementById("copy").style = 'display: "";'
-    document.getElementById("copy").onclick = function () { generate_copy() }
-    add = document.createElement("button")
-    add.type = "button"
-    add.innerHTML = "Quick Add"
-    add.onclick = function() { show() }
-    add.id = "add"
-    document.body.appendChild(add)  
-}
+})
 
 function generate_copy() {
     // Get the text field

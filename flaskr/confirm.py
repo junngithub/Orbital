@@ -51,6 +51,6 @@ def delete():
                 dbconn.commit()
                 cur.close()
                 dbconn.close()
-            flash("Passwords Deleted")
+            flash("Password(s) Deleted")
             return redirect(url_for("menu.home"))
     return render_template('menu/confirm.html', goto = url_for('menu.delete'), message = message)

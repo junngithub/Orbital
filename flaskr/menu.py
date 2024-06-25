@@ -88,33 +88,37 @@ def generate():
 
     password = ""
 
-    if request.method == 'GET':
-        dbconn = get_db()
-        with dbconn.cursor() as cur:
-            table = cur.execute('SELECT pw, salt, iv FROM pw').fetchall()
-            temp = [None] * len(table)
-            i = 0
-            for row in table:
-                cipher_dict = {
-                    'cipher_text' : row[0],
-                    'salt' : row[1],
-                    'iv' : row[2]    
-                }
-                temp[i] = decrypt(cipher_dict, current_app.config['SECRET_KEY'])
-                i += 1
-            table = temp
-        r = random.randint(10, 16)
-        alphabet = string.ascii_letters + string.digits + "!#$%^&*+,-.:;<=>?@_~"
-        while True:
-            password = "".join(secrets.choice(alphabet) for i in range(r))
-            if (any(c.islower() for c in password)
-                    and any(c.isupper() for c in password)
-                    and sum(c.isdigit() for c in password) >= 3
-                    and check(table, password)):
-                break        
     if request.method == 'POST':
-        return add()
-    return render_template('menu/generate.html', password = password)
+        if "gen" in request.form:
+            dbconn = get_db()
+            with dbconn.cursor() as cur:
+                table = cur.execute('SELECT pw, salt, iv FROM pw').fetchall()
+                temp = [None] * len(table)
+                i = 0
+                for row in table:
+                    cipher_dict = {
+                        'cipher_text' : row[0],
+                        'salt' : row[1],
+                        'iv' : row[2]    
+                    }
+                    temp[i] = decrypt(cipher_dict, current_app.config['SECRET_KEY'])
+                    i += 1
+                table = temp
+            r = random.randint(10, 16)
+            alphabet = string.ascii_letters + string.digits
+            if not request.form.get("excluded") :
+                alphabet += "!#$%^&*+,-.:;<=>?@_~"
+            while True:
+                password = "".join(secrets.choice(alphabet) for i in range(r))
+                if (any(c.islower() for c in password)
+                        and any(c.isupper() for c in password)
+                        and sum(c.isdigit() for c in password) >= 3
+                        and check(table, password)):
+                    break  
+            return render_template('menu/generate.html', password = password, gen_btn = "Generate Again?", txt = "Password Generated")      
+        else:            
+            return add()
+    return render_template('menu/generate.html', password="", gen_btn = "Generate", txt = "Your generated password will appear below")
 
 
 @bp.route('/delete', methods=('GET', 'POST'))

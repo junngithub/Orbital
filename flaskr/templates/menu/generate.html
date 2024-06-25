@@ -13,10 +13,13 @@
   </head>
   <br>
   <body>  
-    <form method = "get" id="form" data-pw='{{ password|tojson }}'>
-      <p id="txt">Your generated password will appear below</p>
-      <input type="text" id="here" value="" readonly>
-      <input id=gen type="button" value="Generate" onclick='output()'> <input id=copy type="button" value="Copy" style="display: none;">
+    <form method = "post" id="form" data-defaultlocation="{{ url_for('menu.generate') }}">
+      <p id="txt">{{ txt }}</p>
+      <input type="text" id="here" value="{{ password }}" readonly>
+      <input id="gen" name="gen" type="submit" value="{{ gen_btn }}">
+      <input id="box" type="checkbox" name="excluded">
+      <label id="box_label" for="box"><i>Exclude Special Characters</i></label>
+      <input id="copy" type="button" value="Copy" style="display: none;">
     </form>
   </body>
   <br>
