@@ -12,6 +12,8 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
+    if g.user is not None:
+        return(redirect(url_for("menu.home")))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -45,6 +47,8 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    if g.user is not None:
+        return(redirect(url_for("menu.home")))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -94,7 +98,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for('auth.home'))
+            return redirect(url_for('auth.login'))
 
         return view(**kwargs)
 
