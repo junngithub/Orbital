@@ -6,7 +6,7 @@ from flask import g
 
 def get_db():
     if 'db' not in g:
-        g.db = psycopg.connect("dbname=mydb user=postgres host=localhost password=BBLDrizzy36")
+        g.db = psycopg.connect('postgresql://mydb_2p1t_user:9m2WAZH7m9juJgn8zFjaIGcntnIQ466q@dpg-cpun6ruehbks73el9rn0-a/mydb_2p1t')
     return g.db
 
 
@@ -54,6 +54,7 @@ def init_db():
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    
 
 @click.command('init-db')
 def init_db_command():
