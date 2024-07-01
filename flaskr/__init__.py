@@ -3,10 +3,12 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
+from dotenv import load_dotenv
 
 
 def create_app(test_config=None):
     # create and configure the app
+    load_dotenv()
     app = Flask(__name__, instance_relative_config=True)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
     app.config['SESSION_TYPE'] = 'sqlalchemy'
