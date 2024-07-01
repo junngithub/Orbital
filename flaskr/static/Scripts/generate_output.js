@@ -13,14 +13,12 @@ document.addEventListener('DOMContentLoaded', function() {
         add.innerHTML = "Quick Add"
         add.onclick = function() { show() }
         add.id = "add"
-        document.body.appendChild(add)
+        document.querySelector(".controls").appendChild(add)
     }
 })
 
 function generate_copy() {
     // Get the text field
-    var copyText = document.getElementById("here").value
-    document.getElementById("here").select()
-    document.getElementById("here").setSelectionRange(0, 99999)
+    var copyText = document.getElementById("generated-password").textContent
     copy(copyText)
 }

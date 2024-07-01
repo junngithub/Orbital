@@ -1,21 +1,49 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Add Password{% endblock %}</h1>
-  <a href="{{ url_for('menu.home') }}">Go Back</a>  
-{% endblock %}
-
 {% block page_content %}
-<br>
-  <form method="post" id="form">
-    <label for="website">Website </label>
-    <input name="website" id="website" value="{{ request.form['website'] }}"required>
-    <label for="email">For Who? </label>
-    <input name="email" id="email" value="{{ request.form['email'] }}"required>
-    <label for="password">Password </label>
-    <input type="password" name="password" id="password" value="{{ request.form['password'] }}" required>
-    <input id=add type="submit" value="Add">
-  </form>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Password - Lock&Key</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='/CSS/add.css') }}">
+</head>
 
+<body>
+  <header>
+      <a href="{{ url_for('menu.home') }}">
+              <img src="{{ url_for('static', filename='Image_Files/logo.svg') }}" alt="Lock&Key Logo">
+      </a>
+
+      <nav class="header-right">
+          <ul>
+              <li><a href="{{ url_for('start.start') }}">Sign Out</a></li>
+          </ul>
+      </nav>
+  </header>
+  
+  <main>
+      <section class="form-container">
+          <h2>Add Password</h2>
+          <form id="add-password-form" method='post'>
+            <label for="website">Website:</label>
+            <input type="text" name="website" id="website" value="{{ request.form['website'] }}"required>
+            
+            <label for="email">For Who (Username/Email): </label>
+            <input type="text" name="email" id="email" value="{{ request.form['email'] }}"required>
+            
+            <label for="password">Password: </label>
+            <input type="text" name="password" id="password" value="{{ request.form['password'] }}" required>
+              
+            <button type="submit">Add To Vault</button>
+          </form>
+      </section>
+  </main>
+  <footer>
+      <p>&copy; 2024 Lock&Key. All rights reserved.</p>
+  </footer>
+</body>
 {% endblock %}
 

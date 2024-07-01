@@ -1,36 +1,68 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Generate a Password!{% endblock %}</h1>
-  <a href="{{ url_for('menu.home') }}">Go Back</a>
-{% endblock %}
-
 {% block page_content %}
   <head>
     <script src="{{ url_for('static', filename='Scripts/generate_output.js')}}"></script>
     <script src="{{ url_for('static', filename='Scripts/copy.js')}}"></script>
     <script src="{{ url_for('static', filename='Scripts/show.js')}}"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Password - Lock&Key</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/generate.css') }}">
   </head>
   <br>
-  <body>  
-    <form method = "post" id="form" data-defaultlocation="{{ url_for('menu.generate') }}">
-      <p id="txt">{{ txt }}</p>
-      <input type="text" id="here" value="{{ password }}" readonly>
-      <input id="gen" name="gen" type="submit" value="{{ gen_btn }}">
-      <input id="box" type="checkbox" name="excluded">
-      <label id="box_label" for="box"><i>Exclude Special Characters</i></label>
-      <input id="copy" type="button" value="Copy" style="display: none;">
-    </form>
-  </body>
+  <body>
+    <header>
+      <a href="{{ url_for('menu.home') }}">
+              <img src="{{ url_for('static', filename='/Image_Files/logo.svg') }}" alt="Lock&Key Logo">
+      </a>
+
+      <nav class="header-right">
+          <ul>
+              <li><a href="{{ url_for('start.start') }}">Sign Out</a></li>
+          </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="password-generator">
+        <h2>Generate Password</h2>
+        <form method = "post" id="form" data-defaultlocation="{{ url_for('menu.generate') }}">
+  
+          <p id="txt">{{ txt }}</p>
+          <div id="generated-password" class="generated-password">
+            {{ password }}
+          </div>
+          <div class="controls">
+              <input id="gen" name="gen" type="submit" value="{{ gen_btn }}">
+              <label id="box_label" for="box">
+                <br>
+                <input id="box" type="checkbox" name="excluded">
+                <i>Exclude Special Characters</i>
+              </label>
+              <input id="copy" type="button" value="Copy" style="display: none;">
+          </div>
+        </form>
+      </section>
+      <section class="form-container" style="display: none;" id="optional">
+        <form id="add-password-form" method='post'>
+          <label for="website">Website:</label>
+          <input type="text" name="website" id="website" value="{{ request.form['website'] }}"required>
+          
+          <label for="email">For Who (Username/Email): </label>
+          <input type="text" name="email" id="email" value="{{ request.form['email'] }}"required>
+          
+          <label for="password">Password: </label>
+          <input type="text" name="password" id="password" value="{{ password }}" required>
+            
+          <button type="submit">Add To Vault</button>
+        </form>
+      </section>
+    </main>
   <br>
-  <form method="post" style="display: none;" id="optional">
-    <label for="website">Website </label>
-    <input name="website" id="website" value="{{ request.form['website'] }}"required>
-    <label for="email">For Who? </label>
-    <input name="email" id="email" value="{{ request.form['email'] }}"required>
-    <label for="password">Password </label>
-    <input type="password" name="password" id="password" value="{{ password }}" required>
-    <input type="submit" value="Add">
-  </form>
+  
+</body>
 
 {% endblock %}

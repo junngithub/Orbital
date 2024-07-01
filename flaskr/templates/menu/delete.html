@@ -1,48 +1,55 @@
 {% extends 'base.html' %}
 
-{% block header %}
-    <h1>{% block title %}Delete Password(s){% endblock %}</h1>
-    <a href="{{ url_for('menu.home') }}">Go Back</a>
-{% endblock %}
 
 {% block page_content %}
     <head>
         <script  src="{{ url_for('static', filename='Scripts/delete_actions.js') }}"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Delete Passwords - Lock&Key</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='/CSS/delete.css') }}">
     </head>
-    <h1>
-    <div>
-        <div class="about">Your Passwords</div>
-    </div>
-    </h1>
-    <form method="post" onsubmit="get_checked()">
-        <input name="arr" value="" id="arr" name="arr" hidden>
-        {% if table == "None" %}
-            <i><p>you have not added any passwords</p></i>
-        {% else %}
-            <table>
-                <tr>
-                    <th>Website</th>
-                    <th>Account</th>
-                    <th>Password</th>
-                    <th>Delete</th>
-                </tr>
-            {% for row in table %}
-            <tr>
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-                <td>{{ row[2] }}</td>
-                <td><input type="checkbox" class="box" id="{{ row[3] }}"></td>
-            </tr>
-            {% if not loop.last %}
-            {% endif %}
-            {% endfor %}
-            <tfoot>
-                <tr>
-                    <td><input type="button" onclick="check_all(event)" value="Select All" id="delete-all"></td>
-                    <td><input type="submit" value="Confirm" id="confirm"></td>
-                </tr>
-            </tfoot>
-            </table>
-        {% endif %}
-    </form>
+
+    <body>
+        <header>
+            <a href="{{ url_for('menu.home') }}">
+                    <img src="{{ url_for('static', filename='/Image_Files/logo.svg') }}" alt="Lock&Key Logo">
+            </a>
+    
+            <nav class="header-right">
+                <ul>
+                    <li><a href="{{ url_for('start.start') }}">Sign Out</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="form-container">
+                <h2>Delete Passwords</h2>
+                <form method="post" onsubmit="get_checked()" id="delete-password-form">
+                    <input name="arr" value="" id="arr" name="arr" hidden>
+                    {% if table == "None" %}
+                        <i><p>you have not added any passwords</p></i>
+                    {% else %}
+                        {% for row in table %}
+                            <li>
+                                <input type="checkbox" class="box" id="{{ row[3] }}">
+                                <label>
+                                    <strong>Website:</strong> {{ row[0] }} <br>
+                                    <strong>For:</strong> {{ row[1] }} <br>
+                                    <strong>Password:</strong> {{ row[2] }}
+                                </label>
+                            </li>
+                           
+                        {% if not loop.last %}
+                        {% endif %}
+                        {% endfor %}
+                        <button onclick="check_all(event)" id="delete-all">Select All</button> <button type="submit" id="confirm">Remove From Vault</button>
+                    {% endif %}
+                </form>
+            </section>
+        </main>
+    </body>
 {% endblock %}

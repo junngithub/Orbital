@@ -1,5 +1,77 @@
 {% block header %}
-    <header>"brief description"</header>
-    <p>Ready to get started? <a class="action" href="{{ url_for('auth.register') }}">Click here</a></p>
-    <a class="action" href="{{ url_for('auth.login') }}">Already have an account? Login here</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lock&Key</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
+</head>
+
+<body>
+    <div class="wrap">
+        
+        <header>
+            <div class="header-left">
+                <a href="{{url_for('start.start')}}" class="logo">
+                    <img src="{{ url_for('static', filename='Image_Files/logo.svg') }}" alt="Lock&Key Logo">
+                </a>
+                
+                <div class="divider hide-mobile"></div>
+            
+                <a href="{{url_for('start.start')}}" class="home hide-mobile">Home</a> 
+            </div>
+
+            <nav class="header-right">
+                <a href="#" class="menu-open hide-desktop">
+                    <img src="{{ url_for('static', filename='Image_Files/menu.svg') }}" alt="Open Menu">
+                </a>
+            
+                <ul>
+                    <li>
+                        <a href="#" class="menu-close hide-desktop">
+                            <img src="{{ url_for('static', filename='Image_Files/close.svg') }}" alt="Close Menu">
+                        </a>
+                    </li>
+                    
+                    <li><a href="{{url_for('auth.login')}}">Log In</a></li>
+                    <li><a href="{{url_for('auth.register')}}">Register</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <h1>Keep your passwords safe under Lock&Key</h1>
+            <p class="subhead">
+                ...our all in one password generator and manager so you
+                can get rid of that headache that comes with coming up with
+                new passwords and keeping track of all of them in a
+                notebook you keep losing.
+            </p>
+            <a href="{{url_for('auth.register')}}" class="primary-cta">Get Your Vault</a>
+        </main>
+
+        <div class="illustration-container">
+            <div class="illustration">
+                <img src="{{ url_for('static', filename='Image_Files/vault.png') }}" alt="Vault Illustration">
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const menu = document.querySelector('nav ul');
+        const menuButton = document.querySelector('.menu-open');
+        const closeButton = document.querySelector('.menu-close');
+
+        menuButton.addEventListener('click', () => {
+            menu.classList.add('open')
+        })
+
+        closeButton.addEventListener('click', () => {
+            menu.classList.remove('open')
+        })
+    </script>
+</body>
 {% endblock %}

@@ -1,43 +1,67 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Welcome {{g.user[1]}} {% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="{{ url_for('menu.add') }}">Add Password</a>
-    <a class="action" href="{{ url_for('menu.generate') }}">Generate Password</a>
-    <a class="action" href="{{ url_for('menu.delete') }}">Delete Password</a>
-  {% endif %}
-{% endblock %}
-
 {% block page_content %}
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Lock&Key</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/CSS/home.css') }}">
+
     <script src="{{ url_for('static', filename='Scripts/copy.js') }}"></script>
     <script src="{{ url_for('static', filename='Scripts/home_copy.js') }}"></script>
   </head>
-  <h1>
-    <div>
-      <div class="about">Your Passwords</div>
-    </div>
-  </h1>
-  {% if table == "None" %}
-    <i><p>you have not added any passwords</p></i>
-  {% else %}
-    <table>
-      <tr>
-        <th>Website</th>
-        <th>Account</th>
-        <th>Password</th>
-        <th>Copy</th>
-      </tr>
-    {% for row in table %}
-    <tr>
-      <td>{{ row[0] }}</td>
-      <td>{{ row[1] }}</td>
-      <td>{{ row[2] }}</td>
-      <td><input type="button" class="copy" value="Copy"></td>
-    </tr>
-    {% if not loop.last %}
-    {% endif %}
-  {% endfor %}
-  {% endif %}  
+  <body>
+    <header>
+        <a href="{{url_for('menu.home')}}">
+          <img src="{{ url_for('static', filename='Image_Files/logo.svg') }}" alt="Lock&Key Logo"> 
+        </a>
+        <h1>Welcome {{g.user[1]}}</h1>
+        <nav class="header-right">
+            <ul>
+                <li><a href="{{url_for('start.start')}}">Sign Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+      {% if g.user %}
+      <section class="buttons">
+          <a href="{{ url_for('menu.generate') }}">
+              <button id="generate-password">Generate Password</button>
+          </a>
+
+          <a href="{{ url_for('menu.add') }}">
+              <button id="add-password">Add Password</button>
+          </a>
+          
+          <a href="{{ url_for('menu.delete') }}">
+              <button id="delete-password">Delete Password</button>
+          </a>
+      </section>
+      {% endif %}
+      <section class="password-list">
+        <h2>Your Passwords</h2>
+        {% if table == "None" %}
+          <i><p>you have not added any passwords</p></i>
+        {% else %}
+          {% for row in table %}
+          <li data-pw="{{ row[2] }}">
+            <div class="password-info">
+                <strong>Website:</strong> {{row[0]}}  <br>
+                <strong>User:</strong> {{ row[1] }} <br>
+                <strong>Password:</strong> {{ row[2] }}
+            </div>
+            <input type="button" value="Copy" class="copy-button">
+          </li>
+          {% if not loop.last %}
+          {% endif %}
+          {% endfor %}
+          </table>
+        {% endif %}  
+      </section>
+    </main>
+  </body>
 {% endblock %}

@@ -1,15 +1,35 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Log in{% endblock %}</h1>
-{% endblock %}
-
 {% block page_content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log in">
-  </form>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login to Lock&Key</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/login.css') }}" alt="Vault Illustration">
+</head>
+
+<body>
+  <header>
+      <a href="{{url_for('start.start')}}">
+              <img src="{{ url_for('static', filename='Image_Files/logo.svg') }}" alt="Vault Illustration" alt="Lock&Key Logo">
+      </a>
+  </header>
+
+  <main>
+      <section class="form-container">
+          <h2>Access Your Vault</h2>
+          <form action="#" method="post">
+              <label for="username">Username:</label>
+              <input type="text" id="username" name="username" required>
+              <label for="password">Password:</label>
+              <input type="password" id="password" name="password" required>
+              <button type="submit">Login</button>
+          </form>
+      </section>
+  </main>
+
+</body>
 {% endblock %}

@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const buttons = document.querySelectorAll(".copy")
+    const buttons = document.querySelectorAll(".copy-button")
     buttons.forEach(button => {
         button.addEventListener('click', function() {
-            const row = this.closest('tr')
-            text = row.cells[2].textContent
+            const list = this.closest('li')
+            text = list.dataset.pw
             copy(text)
         })
     })

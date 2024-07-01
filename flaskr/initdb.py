@@ -6,7 +6,7 @@ from flask import g
 
 def get_db():
     if 'db' not in g:
-        g.db = psycopg.connect('postgresql://mydb_2p1t_user:9m2WAZH7m9juJgn8zFjaIGcntnIQ466q@dpg-cpun6ruehbks73el9rn0-a/mydb_2p1t')
+        g.db = psycopg.connect(os.getenv('DATABASE_URL'))
     return g.db
 
 
