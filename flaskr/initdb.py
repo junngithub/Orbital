@@ -5,12 +5,14 @@ from flask import g
 
 
 def get_db():
+    # create and return db connection
     if 'db' not in g:
         g.db = psycopg.connect(os.getenv('DATABASE_URL'))
     return g.db
 
 
-def close_db(e=None):
+def close_db(e = None):
+    # closes db connection at the end of the request
     db = g.pop('db', None)
 
     if db is not None:
@@ -18,7 +20,9 @@ def close_db(e=None):
 
 
 def init_db():
+    # get gb connection
     dbconn = get_db()
+    # create tables if they don't exist
     with dbconn.cursor() as cur:
         cur.execute("""
             CREATE TABLE IF NOT EXISTS users (
@@ -52,13 +56,14 @@ def init_db():
 
 
 def init_app(app):
+    # registers the close_db function to be called when the app context is torn down
     app.teardown_appcontext(close_db)
+    # registers the init_db_command to initialise the db in the Flask CLI
     app.cli.add_command(init_db_command)
     
 
 @click.command('init-db')
 def init_db_command():
-    # Clear the existing data and create new tables.
+    # Clear the existing data and create new tables
     init_db()
     click.echo('Initialized the database.')
-
