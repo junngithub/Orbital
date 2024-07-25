@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse Passwords - Lock&Key</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/analyse.css') }}">
+  </head>
+  <br>
+  <body>
+    <header>
+      <a href="{{ url_for('menu.home') }}">
+        <img src="{{ url_for('static', filename='/Image_Files/logo.svg') }}" alt="Lock&Key Logo">
+      </a>
+
+      <nav class="header-right">
+        <ul>
+          <li><a href="{{ url_for('auth.logout') }}">Sign Out</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="password-analyse">
+        <h2>Analyse Passwords</h2>
+        <form method="post">
+          <table>
+            <thead>
+              <tr>
+                <th>Website</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Strength</th>
+                <th>Unique</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in table %}
+              <tr>
+                <td>{{ record[0] }}</td>
+                <td>{{ record[1] }}</td>
+                <td>{{ record[2] }}</td>
+                <td>{{ record[3] }}</td>
+                <td>{{ record[4] }}</td>
+                <td>
+                  {% if record[3] != 'strong' or record[4] == 'No' %}
+                  <form method="post" action="{{ url_for('menu.generate') }}">
+                    <input type="hidden" name="website" value="{{ record[0] }}">
+                    <input type="hidden" name="email" value="{{ record[1] }}">
+                    <input type="submit" value="Replace">
+                  </form>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </form>
+      </section>
+    </main>
+  <br>
+</body>
+{% endblock %}
