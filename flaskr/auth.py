@@ -46,7 +46,6 @@ def register():
 
     return render_template('auth/register.html')
 
-
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     # redirects logged in user to home page
@@ -80,7 +79,6 @@ def login():
 
     return render_template('auth/login.html')
 
-
 @bp.before_app_request
 def load_logged_in_user():
     # this function runs before each request
@@ -95,13 +93,11 @@ def load_logged_in_user():
             SQL, (user_id,)
         ).fetchone()
 
-
 @bp.route('/logout')
 def logout():
     # upon logout,redirects user to login page
     session.clear()
     return redirect(url_for('auth.login'))
-
 
 def login_required(view):
     # ensures a logged in user is calling the view function, else redirects user to login page

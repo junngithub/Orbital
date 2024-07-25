@@ -40,7 +40,6 @@ def add():
             return redirect(url_for("menu.home"))
     return render_template('menu/confirm.html', goto = url_for('menu.home'), message = message)
 
-
 @bp.route('/delete', methods=('GET', 'POST'))
 @login_required
 def delete():

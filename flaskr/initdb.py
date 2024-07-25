@@ -3,13 +3,11 @@ import psycopg
 import click
 from flask import g
 
-
 def get_db():
     # create and return db connection
     if 'db' not in g:
         g.db = psycopg.connect(os.getenv('DATABASE_URL'))
     return g.db
-
 
 def close_db(e = None):
     # closes db connection at the end of the request
@@ -17,7 +15,6 @@ def close_db(e = None):
 
     if db is not None:
         db.close()
-
 
 def init_db():
     # get gb connection
@@ -54,14 +51,12 @@ def init_db():
         cur.close()
         dbconn.close()
 
-
 def init_app(app):
     # registers the close_db function to be called when the app context is torn down
     app.teardown_appcontext(close_db)
     # registers the init_db_command to initialise the db in the Flask CLI
     app.cli.add_command(init_db_command)
     
-
 @click.command('init-db')
 def init_db_command():
     # Clear the existing data and create new tables
