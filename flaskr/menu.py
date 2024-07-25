@@ -2,27 +2,26 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, session, current_app
 )
 from werkzeug.exceptions import abort
-
 from .auth import login_required
 from .initdb import get_db
 from .actions import decrypt, encrypt, get_all
-
 import string
 import secrets
 import random
 
 bp = Blueprint('menu', __name__, url_prefix='/menu')
 
-
 @bp.route('/')
 @login_required
 def home():
+    # fetches logged in user's data and displays home page accordingly
     table = get_all()
     return render_template('menu/home.html', table = table)
 
 @bp.route('/add', methods=('GET', 'POST'))
 @login_required
 def add():
+    # handle form submission to add a pw
     if request.method == 'POST':
         website = request.form['website'].strip()
         email = request.form['email'].strip()
@@ -42,6 +41,7 @@ def add():
                 web_check = cur.execute(
                     SQL_select, (website,)
                 ).fetchone()
+                
                 # check if website is present
                 if web_check is None:
                     SQL_insert = 'INSERT INTO website(website, website_id) VALUES (%s, %s)'
@@ -56,6 +56,7 @@ def add():
                     SQL_select, (web_check[0], email)
                 ).fetchone()
 
+                # validates the pw added, checking db for existing entries
                 if pw_check is None:
                     SQL_insert = 'INSERT INTO pw (email, pw, pw_id, salt, iv) VALUES (%s, %s, %s, %s, %s)'
                     cur.execute(
@@ -64,9 +65,11 @@ def add():
                     dbconn.commit()
                     cur.close()
                     dbconn.close()
+                    # display success message then redirects user to home page
                     flash("Password Added")
                     return redirect(url_for("menu.home"))
                 else:
+                    # there is existing pw for tagged website so redirects user to confirmation page
                     session['email'] = email
                     session['pw_dict'] = pw_dict
                     session['pw_id'] = web_check[0]
@@ -75,11 +78,11 @@ def add():
                     return redirect(url_for("confirm.add"))
     return render_template('menu/add.html')
 
-
 @bp.route('/generate', methods=('GET', 'POST'))
 @login_required
 def generate():
-    
+    # handle form submission to generate a new pw
+    # inner function to check if generated pw is unique
     def check(table, str):
         for p in table:
             if p == str:
@@ -95,6 +98,7 @@ def generate():
                 table = cur.execute('SELECT pw, salt, iv FROM pw').fetchall()
                 temp = [None] * len(table)
                 i = 0
+                
                 for row in table:
                     cipher_dict = {
                         'cipher_text' : row[0],
@@ -104,12 +108,15 @@ def generate():
                     temp[i] = decrypt(cipher_dict, current_app.config['SECRET_KEY'])
                     i += 1
                 table = temp
+            
             r = random.randint(10, 16)
             alphabet = string.ascii_letters + string.digits
+            
             if not request.form.get("excluded") :
                 alphabet += "!#$%^&*+,-.:;<=>?@_~"
             while True:
                 password = "".join(secrets.choice(alphabet) for i in range(r))
+                # checks if generated pw is unique and meets the complexity requirements
                 if (any(c.islower() for c in password)
                         and any(c.isupper() for c in password)
                         and sum(c.isdigit() for c in password) >= 3
@@ -120,16 +127,17 @@ def generate():
             return add()
     return render_template('menu/generate.html', password="", gen_btn = "Generate", txt = "Your generated password will appear below")
 
-
 @bp.route('/delete', methods=('GET', 'POST'))
 @login_required
 def delete():
+    # handle form submission to delete selected password(s)
     table = get_all()
     if request.method == 'POST':
         temp = request.form["arr"]
         if len(temp) == 0:
             flash("no passwords selected")
         else:
+            # redirects user to confirmation page
             arr = temp.split(",")
             session["arr"] = arr
             return redirect(url_for("confirm.delete"))
