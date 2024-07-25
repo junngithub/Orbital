@@ -5,7 +5,6 @@ import os
 from binascii import unhexlify
 from .initdb import get_db
 from flask import current_app, g
- 
 
 def to_pad(string):
     return Padding.pad(string, 16, style="x923")
@@ -13,6 +12,7 @@ def to_pad(string):
 def to_unpad(string):
     return Padding.unpad(string, 16, style="x923")
 
+# encrypts the padded pw, returning a dict containing hex-encoded cipher text, salt and iv
 def encrypt(password, key):
     salt = os.urandom(AES.block_size)
     iv = os.urandom(AES.block_size)
@@ -25,15 +25,20 @@ def encrypt(password, key):
         'iv' : iv.hex()
     }
 
+# decrypts the pw, returning the original pw
 def decrypt(cipher_dict, key):
+    # convert the hex-encoded salt, cipher text, and IV back to bytes
     salt = unhexlify(cipher_dict['salt'])
     cipher_text = unhexlify(cipher_dict['cipher_text'])
     iv = unhexlify(cipher_dict['iv'])
+    # derive the private key
     private_key = hashlib.blake2b(key.encode(), salt=salt, digest_size=32).digest()
     cipher = AES.new(private_key, AES.MODE_CBC, iv)
+    # decrypt the cipher text and remove padding
     text = to_unpad(cipher.decrypt(cipher_text))
     return text.decode()
 
+# fetch all pw records for a user
 def get_all():
     dbconn = get_db()
     with dbconn.cursor() as cur:
@@ -44,8 +49,10 @@ def get_all():
             ORDER by w.id
         '''
         table = cur.execute(SQL, (g.user[0],)).fetchall()
+        # if no records found, return None
         if not table:
             table = "None"
+        # else return the table containing the records with the decrypted password(s)
         else:
             temp = [None] * len(table)
             i = 0
