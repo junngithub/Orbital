@@ -10,7 +10,9 @@ bp = Blueprint('confirm', __name__, url_prefix='/confirm')
 @bp.route('/add', methods=('GET', 'POST'))
 @login_required
 def add():
-    message = "A password is tied to this website and account. Replace old password?"
+    # display confrmation message to user about replacing existing password
+    # if user confirms, update in db accordingly
+    message = "A password is tied to this website and account. Replace existing password?"
     if request.method == 'POST':
         if request.form['answer'] == "Ok":
             email = session.get('email')
@@ -42,6 +44,8 @@ def add():
 @bp.route('/delete', methods=('GET', 'POST'))
 @login_required
 def delete():
+    # display confrmation message to user about deleting selected password(s)
+    # if user confirms, delete from db accordingly
     arr = session.get("arr")
     message = f"Total of {len(arr)} password(s) to be deleted. Continue?"
     if request.method == 'POST':
