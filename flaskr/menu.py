@@ -91,12 +91,11 @@ def generate():
         return True
 
     password = ""
+    website = request.form.get('website', '').strip()
+    email = request.form.get('email', '').strip()
 
     if request.method == 'POST':
-        website = request.form.get('website', '').strip()
-        email = request.form.get('email', '').strip()
-        
-        if "gen" in request.form:
+        if "gen" in request.form or website and email:
             dbconn = get_db()
             with dbconn.cursor() as cur:
                 table = cur.execute('SELECT pw, salt, iv FROM pw').fetchall()
