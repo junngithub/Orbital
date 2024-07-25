@@ -47,7 +47,7 @@
         </form>
       </section>
       <section class="form-container" style="display: none;" id="optional">
-        <form id="add-password-form" method='post'>
+        <form id="add-password-form" method='post' action="{{ url_for('menu.add_to_vault') }}">
           <label for="website">Website:</label>
           <input type="text" name="website" id="website" value="{{ request.form['website'] }}"required>
           
