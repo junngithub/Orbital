@@ -5,6 +5,7 @@ from werkzeug.exceptions import abort
 from .auth import login_required
 from .initdb import get_db
 from .actions import decrypt, encrypt, get_all
+from .analyse import analyse_passwords
 import string
 import secrets
 import random
@@ -92,6 +93,9 @@ def generate():
     password = ""
 
     if request.method == 'POST':
+        website = request.form.get('website', '').strip()
+        email = request.form.get('email', '').strip()
+        
         if "gen" in request.form:
             dbconn = get_db()
             with dbconn.cursor() as cur:
@@ -122,10 +126,10 @@ def generate():
                         and sum(c.isdigit() for c in password) >= 3
                         and check(table, password)):
                     break  
-            return render_template('menu/generate.html', password = password, gen_btn = "Generate Again?", txt = "Password Generated")      
+            return render_template('menu/generate.html', password = password, gen_btn = "Generate Again?", txt = "Password Generated", website=website, email=email)      
         else:            
             return add()
-    return render_template('menu/generate.html', password="", gen_btn = "Generate", txt = "Your generated password will appear below")
+    return render_template('menu/generate.html', password="", gen_btn = "Generate", txt = "Your generated password will appear below", website=website, email=email)
 
 @bp.route('/delete', methods=('GET', 'POST'))
 @login_required
@@ -142,3 +146,9 @@ def delete():
             session["arr"] = arr
             return redirect(url_for("confirm.delete"))
     return render_template('menu/delete.html', table = table)
+
+@bp.route('/analyse', methods=('GET', 'POST'))
+@login_required
+def analyse():
+    table = analyse_passwords()
+    return render_template('menu/analyse.html', table = table)
