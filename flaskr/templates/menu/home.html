@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/home.css') }}">
 
     <script src="{{ url_for('static', filename='Scripts/copy.js') }}"></script>
-    <script src="{{ url_for('static', filename='Scripts/home_actions.js') }}"></script>
+    <script src="{{ url_for('static', filename='Scripts/home_copy.js') }}"></script>
   </head>
   <body>
     <header>
@@ -30,7 +30,7 @@
       {% if g.user %}
       <section class="buttons">
           <a href="{{ url_for('menu.generate') }}">
-            <button id="generate-password">Generate Password</button>
+              <button id="generate-password">Generate Password</button>
           </a>
 
           <a href="{{ url_for('menu.add') }}">
@@ -43,7 +43,7 @@
 
           <a href="{{ url_for('menu.analyse') }}">
             <button id="analyse-password">Analyse Password</button>
-          </a>
+        </a>
       </section>
       {% endif %}
       <section class="password-list">

@@ -15,7 +15,7 @@ def check_strength(password):
     policy_result = policy.test(password)
     if len(policy_result) == 0:
         return "strong"
-    elif len(policy_result) <= 2:
+    elif len(policy_result) < 2:
         return "moderate"
     else:
         return "weak"

@@ -91,9 +91,12 @@ def generate():
         return True
 
     password = ""
+    website = request.form.get('website', '').strip()
+    email = request.form.get('email', '').strip()
 
     if request.method == 'POST':
-        if "gen" in request.form:
+        # generates a new password if either the gen button is clicked or if website and email are provided (replace functionality for pw analysis feature)
+        if "gen" in request.form or website and email:
             dbconn = get_db()
             with dbconn.cursor() as cur:
                 table = cur.execute('SELECT pw, salt, iv FROM pw').fetchall()
@@ -123,10 +126,10 @@ def generate():
                         and sum(c.isdigit() for c in password) >= 3
                         and check(table, password)):
                     break  
-            return render_template('menu/generate.html', password = password, gen_btn = "Generate Again?", txt = "Password Generated")      
+            return render_template('menu/generate.html', password = password, gen_btn = "Generate Again?", txt = "Password Generated", website=website, email=email)      
         else:            
             return add()
-    return render_template('menu/generate.html', password="", gen_btn = "Generate", txt = "Your generated password will appear below")
+    return render_template('menu/generate.html', password="", gen_btn = "Generate", txt = "Your generated password will appear below", website=website, email=email)
 
 @bp.route('/delete', methods=('GET', 'POST'))
 @login_required
