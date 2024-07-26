@@ -60,7 +60,11 @@
                 <strong>PW Expiry Date:</strong> {{ row[4] if row[4] else "N/A" }}
                 {% for expiring_pw in session['expiring_passwords'] %}
                   {% if expiring_pw.website == row[0] and expiring_pw.email == row[1] %}
-                    <a href="{{ url_for('menu.generate', website=row[0], email=row[1]) }}" class="expiry-badge">Password expiring, please update it!</a>
+                    <form method="post" action="{{ url_for('menu.generate') }}">
+                      <input type="hidden" name="website" value="{{ row[0] }}">
+                      <input type="hidden" name="email" value="{{ row[1] }}">
+                      <input type="submit" class="expiry-badge" value="Password expiring, please update it!">
+                    </form>
                   {% endif %}
                 {% endfor %}
             </div>

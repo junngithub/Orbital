@@ -96,7 +96,9 @@ def generate():
     email = request.form.get('email', '').strip()
 
     if request.method == 'POST':
-        # generates a new password if either the gen button is clicked or if website and email are provided (replace functionality for pw analysis feature)
+        # generates a new password if either the gen button is clicked
+        # or if website and email are provided (replace functionality for pw analysis feature)
+        # or if website and email are provided (update functionality for pw expiry feature)
         if "gen" in request.form or website and email:
             dbconn = get_db()
             with dbconn.cursor() as cur:
