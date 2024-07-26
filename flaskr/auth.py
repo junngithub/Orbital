@@ -76,18 +76,25 @@ def login():
                 session['user_id'] = user[0]
                 
                 # Check for expiring passwords
-                SQL_select = 'SELECT website, email, expiry FROM pw WHERE pw_id = %s'
-                cur.execute(SQL_select, (user[0],))
-                pw_records = cur.fetchall()
-                expiring_passwords = []
-                current_date = datetime.utcnow()
+                expiry_SQL = '''
+                    SELECT w.website, a.email, a.expiry
+                    FROM website w
+                    INNER JOIN pw a ON a.pw_id = w.id
+                    WHERE w.website_id = %s AND a.expiry IS NOT NULL
+                '''
+                expiring_passwords = cur.execute(expiry_SQL, (user[0],)).fetchall()
+                expiring_soon = []
                 
-                for record in pw_records:
+                for record in expiring_passwords:
                     expiry_date = record[2]
-                    if expiry_date and expiry_date <= current_date + timedelta(days=5):
-                        expiring_passwords.append({'website': record[0], 'email': record[1], 'expiry': expiry_date})
+                    if expiry_date and (expiry_date - datetime.now()).days <= 5:
+                        expiring_soon.append({
+                            'website': record[0],
+                            'email': record[1],
+                            'expiry': expiry_date
+                        })
                 
-                session['expiring_passwords'] = expiring_passwords
+                session['expiring_passwords'] = expiring_soon
                 return redirect(url_for('menu.home'))
 
             flash(error)
