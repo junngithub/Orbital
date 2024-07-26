@@ -3,6 +3,7 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 from .auth import login_required
+
 from .initdb import get_db
 
 bp = Blueprint('confirm', __name__, url_prefix='/confirm')

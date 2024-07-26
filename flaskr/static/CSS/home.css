@@ -49,6 +49,10 @@ main {
     align-items: center;
 }
 
+a {
+    text-decoration: none;
+}
+
 .buttons {
     margin-bottom: 20px;
 }

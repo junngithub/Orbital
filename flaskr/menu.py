@@ -5,6 +5,7 @@ from werkzeug.exceptions import abort
 from .auth import login_required
 from .initdb import get_db
 from .actions import decrypt, encrypt, get_all
+from .analyse import analyse_passwords
 import string
 import secrets
 import random
@@ -142,3 +143,9 @@ def delete():
             session["arr"] = arr
             return redirect(url_for("confirm.delete"))
     return render_template('menu/delete.html', table = table)
+
+@bp.route('/analyse', methods=('GET', 'POST'))
+@login_required
+def analyse():
+    table = analyse_passwords()
+    return render_template('menu/analyse.html', table = table)

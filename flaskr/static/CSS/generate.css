@@ -82,6 +82,31 @@ main {
     display: block;
     margin-bottom: 10px;
     font-size: 16px;
+    .info{
+        position: relative;
+    }
+    .info .info-text{
+        visibility: hidden;
+        width: 250px;
+        color: black;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        border:1px solid black;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -60px;
+        background-color:white;
+        opacity: 0;
+        transition: opacity 0.1s;
+        font-size: small;
+    }
+    .info:hover .info-text{
+        visibility: visible;
+        opacity: 1;
+    }
 }
 
 .controls input[type="checkbox"] {

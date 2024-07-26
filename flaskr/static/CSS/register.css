@@ -69,6 +69,10 @@ button:hover {
     color: white;
 }
 
+#requirements {
+    display: none;
+}
+
 footer {
     background-color: #39424e;
     text-align: center;

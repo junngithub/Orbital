@@ -2,7 +2,7 @@
 
 {% block page_content %}
   <head>
-    <script src="{{ url_for('static', filename='Scripts/generate_output.js')}}"></script>
+    <script src="{{ url_for('static', filename='Scripts/generate_actions.js')}}"></script>
     <script src="{{ url_for('static', filename='Scripts/copy.js')}}"></script>
     <script src="{{ url_for('static', filename='Scripts/show.js')}}"></script>
     <meta charset="UTF-8">
@@ -13,7 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/generate.css') }}">
   </head>
-  <br>
   <body>
     <header>
       <a href="{{ url_for('menu.home') }}">
@@ -40,7 +39,10 @@
               <label id="box_label" for="box">
                 <br>
                 <input id="box" type="checkbox" name="excluded">
-                <i>Exclude Special Characters</i>
+                <i>Exclude Special Characters</i> <b class="info">
+                  <span class="info-text">!#$%^&*+,-.:;=>?@_~ etc. </span>
+                  &#9432;
+                </b>
               </label>
               <input id="copy" type="button" value="Copy" style="display: none;">
           </div>

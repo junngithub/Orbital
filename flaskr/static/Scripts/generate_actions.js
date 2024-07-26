@@ -1,19 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById("gen").value == "Generate Again?") {
-        document.getElementById("gen").type = "reset"
-        document.getElementById("gen").onclick = function () {
+    var gen_button = document.getElementById("gen")
+    if (gen_button.value == "Generate Again?") {
+        gen_button.type = "reset"
+        gen_button.onclick = function () {
             location.replace(document.getElementById("form").dataset.defaultlocation)
         }
         document.getElementById("box").remove()
         document.getElementById("box_label").remove()
-        document.getElementById("copy").style = 'display: "";'
-        document.getElementById("copy").onclick = function () { generate_copy() }
-        add = document.createElement("button")
+        var copy_button = document.getElementById("copy")
+        copy_button.style = 'display: "";'
+        copy_button.onclick = function () { generate_copy() }
+        add = document.createElement("input")
         add.type = "button"
-        add.innerHTML = "Quick Add"
+        add.value = "Quick Add"
         add.onclick = function() { show() }
         add.id = "add"
-        document.querySelector(".controls").appendChild(add)
+        copy_button.parentNode.insertBefore(add, copy_button.nextSibling)
     }
 })
 
