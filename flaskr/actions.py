@@ -43,7 +43,7 @@ def get_all():
     dbconn = get_db()
     with dbconn.cursor() as cur:
         SQL = '''
-            SELECT w.website, a.email, a.pw, a.salt, a.iv, a.id
+            SELECT w.website, a.email, a.pw, a.salt, a.iv, a.id, a.expiry
             FROM website w
             INNER JOIN pw a ON a.pw_id = w.id AND w.website_id = %s
             ORDER by w.id
@@ -62,7 +62,7 @@ def get_all():
                     'salt' : row[3],
                     'iv' : row[4]    
                 }
-                temp[i] = (row[0], row[1], decrypt(cipher_dict, current_app.config['SECRET_KEY']), row[5])
+                temp[i] = (row[0], row[1], decrypt(cipher_dict, current_app.config['SECRET_KEY']), row[5], row[6])
                 i += 1
             table = temp
     return table
