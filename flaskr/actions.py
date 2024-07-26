@@ -62,7 +62,8 @@ def get_all():
                     'salt' : row[3],
                     'iv' : row[4]    
                 }
-                temp[i] = (row[0], row[1], decrypt(cipher_dict, current_app.config['SECRET_KEY']), row[5], row[6])
+                expiry_date = row[6].strftime('%Y-%m-%d') if row[6] else None
+                temp[i] = (row[0], row[1], decrypt(cipher_dict, current_app.config['SECRET_KEY']), row[5], expiry_date)
                 i += 1
             table = temp
     return table
