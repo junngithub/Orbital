@@ -23,6 +23,9 @@
     <main>
       <section class="password-analyse">
         <h2>Analyse Passwords</h2>
+        {% if not table %}
+          <i><p>you have not added any passwords</p></i>
+        {% else %}
         <table>
           <thead>
             <tr>
@@ -55,6 +58,7 @@
             {% endfor %}
           </tbody>
         </table>
+        {% endif %}
       </section>
     </main>
   <br>
