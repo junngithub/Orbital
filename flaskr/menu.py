@@ -17,6 +17,8 @@ bp = Blueprint('menu', __name__, url_prefix='/menu')
 def home():
     # fetches logged in user's data and displays home page accordingly
     table = get_all()
+    session['gen-website'] = ""
+    session['gen-email'] = ""
     return render_template('menu/home.html', table = table)
 
 @bp.route('/add', methods=('GET', 'POST'))
@@ -96,7 +98,9 @@ def generate():
 
     if request.method == 'POST':
         # generates a new password if either the gen button is clicked or if website and email are provided (replace functionality for pw analysis feature)
-        if "gen" in request.form or website and email:
+        if "add" in request.form:            
+            return add()
+        else: 
             dbconn = get_db()
             with dbconn.cursor() as cur:
                 table = cur.execute('SELECT pw, salt, iv FROM pw').fetchall()
@@ -126,9 +130,15 @@ def generate():
                         and sum(c.isdigit() for c in password) >= 3
                         and check(table, password)):
                     break  
-            return render_template('menu/generate.html', password = password, gen_btn = "Generate Again?", txt = "Password Generated", website=website, email=email)      
-        else:            
-            return add()
+            if not (website == "" and email == ""):
+                session['gen-website'] = website
+                session['gen-email'] = email
+            else:
+                website = session['gen-website']
+                email = session['gen-email']
+
+            return render_template('menu/generate.html', password = password, gen_btn = "Generate Again?", txt = "Password Generated", website=website, email=email)
+               
     return render_template('menu/generate.html', password="", gen_btn = "Generate", txt = "Your generated password will appear below", website=website, email=email)
 
 @bp.route('/delete', methods=('GET', 'POST'))

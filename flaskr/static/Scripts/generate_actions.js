@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     var gen_button = document.getElementById("gen")
     if (gen_button.value == "Generate Again?") {
-        gen_button.type = "reset"
+        gen_button.type = "submit"
+
         gen_button.onclick = function () {
-            location.replace(document.getElementById("form").dataset.defaultlocation)
+            window.location.reload()
         }
-        document.getElementById("box").remove()
-        document.getElementById("box_label").remove()
+
         var copy_button = document.getElementById("copy")
         copy_button.style = 'display: "";'
         copy_button.onclick = function () { generate_copy() }

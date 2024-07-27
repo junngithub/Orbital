@@ -36,30 +36,32 @@
           </div>
           <div class="controls">
               <input id="gen" name="gen" type="submit" value="{{ gen_btn }}">
-              <label id="box_label" for="box">
-                <br>
-                <input id="box" type="checkbox" name="excluded">
-                <i>Exclude Special Characters</i> <b class="info">
-                  <span class="info-text">!#$%^&*+,-.:;=>?@_~ etc. </span>
-                  &#9432;
-                </b>
-              </label>
+              <span>
+                <label id="box_label" for="box">
+                  <input id="box" type="checkbox" name="excluded">
+                  <i>Exclude Special Characters</i> <b class="info">
+                    <span class="info-text">!#$%^&*+,-.:;=>?@_~ etc. </span>
+                    &#9432;
+                  </b>
+                </label>
+              </span>
+
               <input id="copy" type="button" value="Copy" style="display: none;">
           </div>
         </form>
       </section>
       <section class="form-container" style="display: none;" id="optional">
-        <form id="add-password-form" method='post'>
+        <form id="add-password-form" method='post' action="{{ url_for('menu.generate') }}">
           <label for="website">Website:</label>
-          <input type="text" name="website" id="website" value="{{ request.form['website'] }}"required>
+          <input type="text" name="website" id="website" value="{{ website }}"required>
           
           <label for="email">For Who (Username/Email): </label>
-          <input type="text" name="email" id="email" value="{{ request.form['email'] }}"required>
+          <input type="text" name="email" id="email" value="{{ email }}"required>
           
           <label for="password">Password: </label>
           <input type="text" name="password" id="password" value="{{ password }}" required>
             
-          <button type="submit">Add To Vault</button>
+          <button name="add" type="submit">Add To Vault</button>
         </form>
       </section>
     </main>
