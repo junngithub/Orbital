@@ -30,6 +30,7 @@ def add():
         email = request.form['email'].strip()
         pw_dict = encrypt(request.form['password'].strip(), current_app.config['SECRET_KEY'])
         pw = pw_dict['cipher_text']
+        expiry = request.form['expiry'].strip() or None
         error = None
 
         if not website:
@@ -61,9 +62,9 @@ def add():
 
                 # validates the pw added, checking db for existing entries
                 if pw_check is None:
-                    SQL_insert = 'INSERT INTO pw (email, pw, pw_id, salt, iv) VALUES (%s, %s, %s, %s, %s)'
+                    SQL_insert = 'INSERT INTO pw (email, pw, pw_id, salt, iv, expiry) VALUES (%s, %s, %s, %s, %s, %s)'
                     cur.execute(
-                        SQL_insert, (email, pw, web_check[0], pw_dict['salt'], pw_dict['iv'])
+                        SQL_insert, (email, pw, web_check[0], pw_dict['salt'], pw_dict['iv'], expiry)
                     )
                     dbconn.commit()
                     cur.close()
@@ -97,7 +98,9 @@ def generate():
     email = request.form.get('email', '').strip()
 
     if request.method == 'POST':
-        # generates a new password if either the gen button is clicked or if website and email are provided (replace functionality for pw analysis feature)
+        # generates a new password if either the gen button is clicked
+        # or if website and email are provided (replace functionality for pw analysis feature)
+        # or if website and email are provided (update functionality for pw expiry feature)
         if "add" in request.form:            
             return add()
         else: 
