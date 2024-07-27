@@ -1,0 +1,24 @@
+body {
+    font-family: 'Inter';
+    background-color: #2a3a4b;
+    color: #d5dee5;
+    margin: 0;
+    padding: 0;
+
+}
+
+dialog{
+    margin-top: 20%;
+    align-self: center;
+    background-color: #f2e7cf;
+}
+input {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #e08a3c;
+    border: none;
+    border-radius: 5px;
+    color: #2a3a4b;
+    font-size: 16px;
+    cursor: pointer;
+}

@@ -10,8 +10,18 @@ function get_checked() {
 
 function check_all(e) {
     e.preventDefault()
+    var select_all = document.getElementById("select-all")
     var boxes = document.querySelectorAll(".box")
-    boxes.forEach(box => {
-        box.checked = true
-    })
+    if (select_all.innerHTML == "Select All") {
+        boxes.forEach(box => {
+            box.checked = true
+        })
+        select_all.innerHTML = "Unselect All"
+    } else {
+        boxes.forEach(box => {
+            box.checked = false
+        })
+        select_all.innerHTML = "Select All"
+    }
+
 }

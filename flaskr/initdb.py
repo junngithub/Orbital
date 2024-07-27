@@ -6,7 +6,7 @@ from flask import g
 def get_db():
     # create and return db connection
     if 'db' not in g:
-        g.db = psycopg.connect(os.getenv('DATABASE_URL'))
+        g.db = psycopg.connect("postgresql://m3db_user:tkFCJJbHjkStWrurXODbNT84LXGMd9AL@dpg-cqig5v8gph6c738or7ig-a.singapore-postgres.render.com/m3db")
     return g.db
 
 def close_db(e = None):
@@ -22,6 +22,11 @@ def init_db():
     # create tables if they don't exist
     with dbconn.cursor() as cur:
         cur.execute("""
+            DROP TABLE pw;
+            DROP TABLE website;
+            DROP TABLE users;
+            
+                    
             CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             username TEXT UNIQUE NOT NULL,

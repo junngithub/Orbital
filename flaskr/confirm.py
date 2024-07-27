@@ -20,17 +20,19 @@ def add():
             pw_dict = session.get('pw_dict')
             pw = pw_dict['cipher_text']
             pw_id = session.get('pw_id')
+            expiry = session.get('expiry')
             dbconn = get_db()
-            
+            if expiry == '':
+                expiry = None
             with dbconn.cursor() as cur:
                 SQL_delete = 'DELETE FROM pw WHERE email = %s AND pw_id = %s'
-                SQL_insert = 'INSERT INTO pw (email, pw, pw_id, salt, iv) VALUES (%s, %s, %s, %s, %s)' 
+                SQL_insert = 'INSERT INTO pw (email, pw, pw_id, salt, iv, expiry) VALUES (%s, %s, %s, %s, %s, %s)' 
                 
                 cur.execute(
                     SQL_delete, (email, pw_id) 
                 )
                 cur.execute(
-                    SQL_insert, (email, pw, pw_id, pw_dict['salt'], pw_dict['iv']) 
+                    SQL_insert, (email, pw, pw_id, pw_dict['salt'], pw_dict['iv'], expiry) 
                 )
                 
                 dbconn.commit()

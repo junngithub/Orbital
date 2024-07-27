@@ -60,6 +60,9 @@
           
           <label for="password">Password: </label>
           <input type="text" name="password" id="password" value="{{ password }}" required>
+
+          <label for="expiry">Expiry Date (optional):</label>
+            <input type="date" name="expiry" id="expiry" value="{{ request.form['expiry'] }}">
             
           <button name="add" type="submit">Add To Vault</button>
         </form>

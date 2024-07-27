@@ -21,6 +21,7 @@ header {
     justify-content: space-between;
     background-color: #f2e7cf;
     width: 100%;
+    border-radius: 10px;
 }
 
 .logo {
@@ -31,31 +32,26 @@ header {
 nav ul {
     background-color: white;
     position: fixed;
-    
+    border-radius: 10px;
     z-index: 999;
     top: 0;
     right: 0;
-    height: 100vh;
-    width: 40%;
-    
-    margin: 0;
+    height: fit-content;
+    width: 20%;
+    margin-right: 10px;
     list-style: none;
     text-align: right;
     transform: translateX(100%);
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
     li {
-        margin: 2em 0;
-        
-        &:nth-of-type(1) {
-            margin-bottom: 4em;
-        }
-
+        margin-top: 7.5%;
+        margin-bottom: 7.5%;
         a {
             color: black;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 15px;
 
             &:hover {
                 color: #FFA800;
@@ -65,8 +61,31 @@ nav ul {
     }
 }
 
+.header-right{
+    padding-right: 2.5%;
+}
+
+.menu-open{
+    img {
+        padding-top: 50%;        
+    }
+}
+
 .open {
+    border-style: solid;
+    border-width: 2px;
     transform: translateX(0%);
+    border-radius: 10px;
+    height: fit-content;
+    .icon{
+        margin-top: 15%;
+        margin-bottom: 10%;
+    }
+    li {
+        margin-top: 0%;
+        margin-right: 10%;
+        margin-bottom: 10%;
+    }
 }
 
 h1, p {
@@ -137,9 +156,18 @@ footer {
     font-size: small;
 }
 
+@media (max-width: 798px){
+    .header-left {
+        img {
+            transform: scale(75%) translateX(-20%);
+            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    }
+}
+
 @media (min-width: 798px) {
     .wrap {
-        margin: 0 4em;
+        margin: 2em 2em;
     }
 
     .hide-desktop {
@@ -155,7 +183,6 @@ footer {
         justify-content: space-between;
         align-items: center;
         gap: 1em;
-
         .divider {
             height: 50px;
             width: 1px;
@@ -178,7 +205,7 @@ footer {
         position: unset;
         background: none;
         display: flex;
-        
+        width: 2em;
         gap: 2em;
         width: auto;
         height: auto;
@@ -186,7 +213,7 @@ footer {
         transform: translateX(0%);
 
         li a {
-            font-size: 1.2rem;
+            font-size: 1.5em;
         }
     }
 }
@@ -233,7 +260,7 @@ footer {
 
 @media (min-width: 1200px) {
     .wrap {
-        margin: 0 auto;
+        margin: 20px auto;
         padding: 0 2em;
         max-width: 1200px;
     }

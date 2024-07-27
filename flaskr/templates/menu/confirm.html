@@ -2,12 +2,22 @@
 
 {% block page_content %}
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Password - Lock&Key</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/confirm.css') }}">
     <script src="{{ url_for('static', filename='Scripts/cancel.js') }}"></script>
   </head>
-  <form method="post" data-defaultlocation="{{ goto }}" id="form">
-    <dialog open>
-      <p> {{ message }} </p>
-      <input type="submit" value="Ok" name="answer" id="Ok"> <input type = "button" value="Cancel" onclick="cancel()" name="answer" id="Cancel">
-    </dialog>
-  </form>
+  <body>
+    <form method="post" data-defaultlocation="{{ goto }}" id="form">
+      <dialog open>
+        <p> {{ message }} </p>
+        <input type="submit" value="Ok" name="answer" id="Ok"> <input type = "button" value="Cancel" onclick="cancel()" name="answer" id="Cancel">
+      </dialog>
+    </form>
+  </body>
+    
 {% endblock %}

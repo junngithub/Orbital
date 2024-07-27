@@ -9,14 +9,36 @@ from .analyse import analyse_passwords
 import string
 import secrets
 import random
+from datetime import datetime, timedelta
 
 bp = Blueprint('menu', __name__, url_prefix='/menu')
 
 @bp.route('/')
 @login_required
 def home():
-    # fetches logged in user's data and displays home page accordingly
+    # fetches logged in user's data and displays home page accordingly    
     table = get_all()
+    # Check for expiring passwords
+    dbconn = get_db()
+    with dbconn.cursor() as cur:
+        expiry_SQL = '''
+            SELECT w.website, a.email, a.expiry
+            FROM website w
+            INNER JOIN pw a ON a.pw_id = w.id
+            WHERE w.website_id = %s AND a.expiry IS NOT NULL
+        '''
+        expiring_passwords = cur.execute(expiry_SQL, (g.user[0],)).fetchall()
+        expiring_soon = []
+        
+        for record in expiring_passwords:
+            expiry_date = record[2]
+            if expiry_date and (expiry_date - datetime.now()).days <= 5:
+                expiring_soon.append({
+                    'website': record[0],
+                    'email': record[1],
+                    'expiry': expiry_date
+                })
+    session['expiring_passwords'] = expiring_soon
     session['gen-website'] = ""
     session['gen-email'] = ""
     return render_template('menu/home.html', table = table)
@@ -30,7 +52,7 @@ def add():
         email = request.form['email'].strip()
         pw_dict = encrypt(request.form['password'].strip(), current_app.config['SECRET_KEY'])
         pw = pw_dict['cipher_text']
-        expiry = request.form['expiry'].strip() or None
+        expiry = request.form['expiry'].strip()
         error = None
 
         if not website:
@@ -63,8 +85,10 @@ def add():
                 # validates the pw added, checking db for existing entries
                 if pw_check is None:
                     SQL_insert = 'INSERT INTO pw (email, pw, pw_id, salt, iv, expiry) VALUES (%s, %s, %s, %s, %s, %s)'
+                    if expiry == '':
+                        expiry = None
                     cur.execute(
-                        SQL_insert, (email, pw, web_check[0], pw_dict['salt'], pw_dict['iv'], expiry)
+                        SQL_insert, (email, pw, web_check[0], pw_dict['salt'], pw_dict['iv'], )
                     )
                     dbconn.commit()
                     cur.close()
@@ -77,6 +101,7 @@ def add():
                     session['email'] = email
                     session['pw_dict'] = pw_dict
                     session['pw_id'] = web_check[0]
+                    session['expiry'] = expiry
                     cur.close()
                     dbconn.close()
                     return redirect(url_for("confirm.add"))

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/home.css') }}">
 
     <script src="{{ url_for('static', filename='Scripts/copy.js') }}"></script>
-    <script src="{{ url_for('static', filename='Scripts/home_copy.js') }}"></script>
+    <script src="{{ url_for('static', filename='Scripts/home_actions.js') }}"></script>
   </head>
   <body>
     <header>
@@ -21,7 +21,7 @@
         <h1>Welcome {{g.user[1]}}</h1>
         <nav class="header-right">
             <ul>
-                <li><a href="{{url_for('auth.logout')}}">Sign Out</a></li>
+                <li><div><a href="{{url_for('auth.logout')}}">Sign Out</a></div></li>
             </ul>
         </nav>
     </header>

@@ -18,22 +18,32 @@ header h1 {
 }
 
 nav ul {
-    position: fixed;
+    position: absolute;
     
     z-index: 999;
     top: 0;
-    right: 0;
-    width: 8%;
-    
-    li {
-        margin: 1em 0;
+    right: 2%;
+    width: fit-content;
+    list-style-type: none;
+    padding: 0;
 
+    li {
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #2a3a4b;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        div {
+            text-align: center;
+        }
         a {
-            color: black;
+            color: white;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.4rem;
-
+            font-size: 14px;
             &:hover {
                 color: #FFA800;
                 text-decoration: underline;

@@ -7,7 +7,6 @@
     <title>Analyse Passwords - Lock&Key</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/analyse.css') }}">
   </head>
-  <br>
   <body>
     <header>
       <a href="{{ url_for('menu.home') }}">
@@ -24,7 +23,6 @@
       <section class="password-analyse">
         <h2>Analyse Passwords</h2>
         <table>
-          <thead>
             <tr>
               <th>Website</th>
               <th>Email</th>
@@ -33,15 +31,13 @@
               <th>Unique</th>
               <th>Action</th>
             </tr>
-          </thead>
-          <tbody>
-            {% for record in table %}
+          {% for record in table %}
             <tr>
               <td>{{ record[0] }}</td>
               <td>{{ record[1] }}</td>
               <td>{{ record[2] }}</td>
-              <td>{{ record[3] }}</td>
-              <td>{{ record[4] }}</td>
+              <td class="{{ record[3] }}">{{ record[3] }}</td>
+              <td class="{{ record[4] }}">{{ record[4] }}</td>
               <td>
                 {% if record[3] != 'strong' or record[4] == 'No' %}
                 <form method="post" action="{{ url_for('menu.generate') }}">
@@ -49,11 +45,12 @@
                   <input type="hidden" name="email" value="{{ record[1] }}">
                   <input type="submit" value="Replace">
                 </form>
+                {% else %}
+                <input type="text" value="N/A" readonly>
                 {% endif %}
               </td>
             </tr>
-            {% endfor %}
-          </tbody>
+          {% endfor %}
         </table>
       </section>
     </main>
