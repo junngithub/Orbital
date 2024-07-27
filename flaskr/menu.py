@@ -88,7 +88,7 @@ def add():
                     if expiry == '':
                         expiry = None
                     cur.execute(
-                        SQL_insert, (email, pw, web_check[0], pw_dict['salt'], pw_dict['iv'], )
+                        SQL_insert, (email, pw, web_check[0], pw_dict['salt'], pw_dict['iv'], expiry)
                     )
                     dbconn.commit()
                     cur.close()
