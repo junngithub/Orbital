@@ -13,6 +13,7 @@ dialog{
     align-self: center;
     background-color: #f2e7cf;
 }
+
 input {
     padding: 10px 20px;
     margin: 0 10px;
@@ -22,4 +23,8 @@ input {
     color: #2a3a4b;
     font-size: 16px;
     cursor: pointer;
+}
+
+input:hover {
+    color: white;
 }
