@@ -5,7 +5,6 @@ from flask import (
 from psycopg import IntegrityError
 from werkzeug.security import check_password_hash, generate_password_hash
 from .initdb import get_db
-from datetime import datetime, timedelta
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -74,27 +73,6 @@ def login():
             if error is None:
                 session.clear()
                 session['user_id'] = user[0]
-                
-                # Check for expiring passwords
-                expiry_SQL = '''
-                    SELECT w.website, a.email, a.expiry
-                    FROM website w
-                    INNER JOIN pw a ON a.pw_id = w.id
-                    WHERE w.website_id = %s AND a.expiry IS NOT NULL
-                '''
-                expiring_passwords = cur.execute(expiry_SQL, (user[0],)).fetchall()
-                expiring_soon = []
-                
-                for record in expiring_passwords:
-                    expiry_date = record[2]
-                    if expiry_date and (expiry_date - datetime.now()).days <= 5:
-                        expiring_soon.append({
-                            'website': record[0],
-                            'email': record[1],
-                            'expiry': expiry_date
-                        })
-                
-                session['expiring_passwords'] = expiring_soon
                 return redirect(url_for('menu.home'))
 
             flash(error)
