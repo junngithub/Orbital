@@ -129,7 +129,15 @@ input[type="submit"] {
     color: #ffffff;
     font-size: 14px;
     cursor: pointer;
+    text-align: center;
 }
+
+input[type="submit"]:hover {
+    text-decoration: underline;
+    background-color: white;
+    color: #FFA800;
+}
+
 .copy-button {
     padding: 5px 10px;
     background-color: #e08a3c;
