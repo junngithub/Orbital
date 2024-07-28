@@ -8,15 +8,27 @@ body {
 
 header {
     display: flex;
+    align-items: center;
     padding: 1em;
     background-color: #f2e7cf;
-    a{ width:33.33%}
+    a{ 
+        width:30%;
+        left: 0.5%;
+        img{
+
+            width: 5em;
+            height: 5em;
+        }
+    }
+    
 }
 
+
 header h1 {
+    font-size: 120%;
     color: #e08a3c;
     text-align: center;
-    width: 33.33%;
+    width: 37%;
 }
 
 nav ul {
@@ -24,7 +36,7 @@ nav ul {
     
     z-index: 999;
     top: 0;
-    right: 2%;
+    right: 2.5%;
     width: fit-content;
     li {
         div {
@@ -111,12 +123,12 @@ li {
 
 input[type="submit"] {
     padding: 10px 20px;
-    margin: 10px auto;
+    margin: 10px 0px;
     background-color: #e03c3c;
     border: none;
     border-radius: 5px;
     color: #ffffff;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
 }
 .copy-button {

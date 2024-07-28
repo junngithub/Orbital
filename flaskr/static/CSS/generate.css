@@ -7,19 +7,25 @@ body {
 }
 
 header {
-    position: relative;
+    display: flex;
+    align-items: center;
     padding: 1em;
     background-color: #f2e7cf;
-}
+    a { 
+        width:30%;
+        img{
 
-header h1 {
-    margin: 0;
-    color: #e08a3c;
+            width: 5em;
+            height: 5em;
+        }
+    }
+    
 }
 
 nav ul {
     position: absolute;
-    
+    padding: 0;
+    list-style-type: none;
     z-index: 999;
     top: 0;
     right: 2%;
@@ -29,6 +35,7 @@ nav ul {
             text-align: center;
         }
         a {
+            width: max-content;
             color: white;
             text-decoration: none;
             font-weight: bold;

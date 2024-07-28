@@ -8,6 +8,7 @@ body {
 }
 
 dialog{
+    text-align: center;
     margin-top: 20%;
     align-self: center;
     background-color: #f2e7cf;

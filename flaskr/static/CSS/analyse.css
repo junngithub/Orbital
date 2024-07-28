@@ -10,6 +10,14 @@ header {
     position: relative;
     padding: 1em;
     background-color: #f2e7cf;
+    a { 
+        width:30%;
+        img{
+
+            width: 5em;
+            height: 5em;
+        }
+    }
 }
 
 header h1, h2 {
@@ -40,6 +48,7 @@ nav ul {
             text-align: center;
         }
         a {
+            width: fit-content;
             color: white;
             text-decoration: none;
             font-weight: bold;
@@ -63,14 +72,16 @@ main {
     background-color: #39424e;
     padding: 20px;
     border-radius: 10px;
-    width: 100%;
+    width: fit-content;
     max-width: 600px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    
 }
 
 table {
+    font-size: 10px;
     margin: 10px 0;
-    width: 100%;
+    width: fit-content;
     background-color: #2a3a4b;
     padding: 10px;
     border-collapse: collapse;
@@ -115,7 +126,7 @@ input[type="submit"], input[type="text"]{
     padding: 10px 0px;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 10px;
     cursor: pointer;
     width: 100%
 }
@@ -132,4 +143,8 @@ input[type="text"]{
 
 form {
     text-align: center;
+}
+
+.wrap{
+    font-size: 1rem;
 }

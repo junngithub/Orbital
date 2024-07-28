@@ -10,6 +10,14 @@ header {
     position: relative;
     padding: 1em;
     background-color: #f2e7cf;
+    a { 
+        width:30%;
+        img{
+
+            width: 5em;
+            height: 5em;
+        }
+    }
 }
 
 header h1 {
@@ -38,6 +46,7 @@ nav ul {
             text-align: center;
         }
         a {
+            width: fit-content;
             color: white;
             text-decoration: none;
             font-weight: bold;

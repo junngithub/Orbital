@@ -14,7 +14,8 @@
     <script src="{{ url_for('static', filename='Scripts/home_actions.js') }}"></script>
   </head>
   <body>
-    <header>
+    <div class="wrap">
+      <header>
         <a href="{{url_for('menu.home')}}">
           <img src="{{ url_for('static', filename='Image_Files/logo.svg') }}" alt="Lock&Key Logo"> 
         </a>
@@ -24,7 +25,8 @@
                 <li><div><a href="{{url_for('auth.logout')}}">Sign Out</a></div></li>
             </ul>
         </nav>
-    </header>
+      </header>
+    </div>
     
     <main>
       {% if g.user %}
