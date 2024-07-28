@@ -65,14 +65,14 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 20px 10px;
 }
 
 .password-analyse {
     background-color: #39424e;
-    padding: 20px;
+    padding: 0.5em;
     border-radius: 10px;
-    width: fit-content;
+    width: 100%;
     max-width: 600px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     
@@ -81,9 +81,9 @@ main {
 table {
     font-size: 10px;
     margin: 10px 0;
-    width: fit-content;
+    width: 100%;
     background-color: #2a3a4b;
-    padding: 10px;
+    padding: 15px;
     border-collapse: collapse;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     border: 3px solid black;
@@ -92,8 +92,8 @@ table {
 td, th {
     align-items: center;
     border: 2px solid black;
-    text-align: left;
-    padding: 8px;
+    text-align: center;
+    padding: 2px;
 }
 
 td{
@@ -128,17 +128,21 @@ input[type="submit"], input[type="text"]{
     border-radius: 5px;
     font-size: 10px;
     cursor: pointer;
-    width: 100%
+    
 }
 
 input[type="submit"]{
     background-color: #e03c3c;
     color: white;
+    padding: 1em 0.25em;
+    width: 85%;
 }
 
 input[type="text"]{
     background-color: #e08a3c;
     color: #2a3a4b;
+    padding: 1em 0.25em;
+    width: 80%
 }
 
 form {
