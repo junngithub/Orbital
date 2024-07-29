@@ -6,7 +6,7 @@ from flask import g
 def get_db():
     # create and return db connection
     if 'db' not in g:
-        g.db = psycopg.connect(os.getenv('DATABASE_URL'))
+        g.db = psycopg.connect(os.getenv("DATABASE_URL"))
     return g.db
 
 def close_db(e = None):
@@ -21,7 +21,7 @@ def init_db():
     dbconn = get_db()
     # create tables if they don't exist
     with dbconn.cursor() as cur:
-        cur.execute("""             
+        cur.execute("""          
             CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             username TEXT UNIQUE NOT NULL,

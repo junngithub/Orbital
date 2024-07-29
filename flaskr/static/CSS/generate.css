@@ -185,15 +185,6 @@ label {
     margin: 10px 0 5px;
 }
 
-footer {
-    background-color: #39424e;
-    padding: 10px;
-    text-align: center;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-}
-
 li {
     margin: 10px 0;
     display: flex;

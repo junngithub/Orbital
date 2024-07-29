@@ -145,12 +145,3 @@ input[type="submit"] {
 .copy-button:hover {
     color: white;
 }
-
-footer {
-    background-color: #39424e;
-    padding: 10px;
-    text-align: center;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-}
