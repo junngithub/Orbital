@@ -156,5 +156,28 @@ form {
 }
 
 .wrap{
-    font-size: 1.2rem;
+    font-size: 1em;
+}
+
+@media (max-width: 798px){
+    .password-analyse {
+        padding: 0.5em;
+        max-width: 600px;
+    }
+
+    table {
+        font-size: 10px;
+    }
+
+    td, th {
+        padding: 2px;
+    }
+
+    td {
+        font-size: 10px;
+    }
+
+    input[type="submit"], input[type="text"]{
+        font-size: 10px;
+    }
 }
