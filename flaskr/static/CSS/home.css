@@ -23,9 +23,8 @@ header {
     
 }
 
-
 header h1 {
-    font-size: 120%;
+    font-size: 180%;
     color: #e08a3c;
     text-align: center;
     width: 37%;
@@ -130,7 +129,15 @@ input[type="submit"] {
     color: #ffffff;
     font-size: 14px;
     cursor: pointer;
+    text-align: center;
 }
+
+input[type="submit"]:hover {
+    text-decoration: underline;
+    background-color: white;
+    color: #FFA800;
+}
+
 .copy-button {
     padding: 5px 10px;
     background-color: #e08a3c;

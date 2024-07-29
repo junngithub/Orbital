@@ -70,16 +70,16 @@ main {
 
 .password-analyse {
     background-color: #39424e;
-    padding: 0.5em;
+    padding: 1.5em;
     border-radius: 10px;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     
 }
 
 table {
-    font-size: 10px;
+    font-size: 16px;
     margin: 10px 0;
     width: 100%;
     background-color: #2a3a4b;
@@ -93,7 +93,7 @@ td, th {
     align-items: center;
     border: 2px solid black;
     text-align: center;
-    padding: 2px;
+    padding: 10px;
 }
 
 td{
@@ -126,7 +126,7 @@ input[type="submit"], input[type="text"]{
     padding: 10px 0px;
     border: none;
     border-radius: 5px;
-    font-size: 10px;
+    font-size: 16px;
     cursor: pointer;
     
 }
@@ -136,6 +136,12 @@ input[type="submit"]{
     color: white;
     padding: 1em 0.25em;
     width: 85%;
+}
+
+input[type="submit"]:hover {
+    text-decoration: underline;
+    background-color: white;
+    color: #FFA800;
 }
 
 input[type="text"]{
@@ -150,5 +156,5 @@ form {
 }
 
 .wrap{
-    font-size: 1rem;
+    font-size: 1.2rem;
 }

@@ -24,3 +24,7 @@ input {
     font-size: 16px;
     cursor: pointer;
 }
+
+input:hover {
+    color: white;
+}
